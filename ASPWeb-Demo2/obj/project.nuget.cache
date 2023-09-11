@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "dwtC5wWrN2ANOInDxVjzGdENYEJyPR9GGLFSJnnpcsQUrMEXTbg/r7vdjO4boGYmNMjaHojyUktidQfkNyPp8g==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\ASPWeb-Demo2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\EJRKC\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

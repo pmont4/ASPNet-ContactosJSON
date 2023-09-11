@@ -1,0 +1,52 @@
+﻿@model List<Contacto>
+@{
+    ViewData["title"] = "Contactos - Inicio";
+}
+
+<div class="row" style="margin-top: 30px">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                        <ul class="nav nav-pills card-header-pills">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Lista</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Contacto" asp-action="Crear">Crear</a>
+                            </li>
+                        </ul>
+                        <div class=""></div>
+            </div>
+            <div class="card-body">
+                <div class="shadow p-3 mb-5 bg-body rounded">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Identificador</th>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th style="width:150px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Contacto contacto in Model)
+                                {
+                                    <tr>
+                                        <td>@contacto.idcontacto</td>
+                                        <td>@contacto.nombre</td>
+                                        <td>@contacto.correo</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm">Editar</a>
+                                            <a class="btn btn-danger btn-sm">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
