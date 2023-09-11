@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "x9PummBfzr16zDfOUl/CrMV1+YGedbd6/3qLASp6e5o=",
+  "Hash": "EcxplHo9wwlmrmJXGkQB/r+1PlyF7cdzviSWzo/i9aM=",
   "Source": "ASPWeb-Demo2",
   "BasePath": "_content/ASPWeb-Demo2",
   "Mode": "Default",
@@ -83,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\wwwroot\\img\\goback.png",
+      "SourceId": "ASPWeb-Demo2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\wwwroot\\",
+      "BasePath": "_content/ASPWeb-Demo2",
+      "RelativePath": "img/goback.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\goback.png"
     },
     {
       "Identity": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\wwwroot\\img\\logo.png",

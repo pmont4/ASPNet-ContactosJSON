@@ -1,0 +1,36 @@
+﻿@model Contacto
+@{
+    ViewData["title"] = "Contactos - Eliminar";
+}
+
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header bg-danger">
+                <a href="@Url.Action("Inicio","Contacto")">
+                    <img src="~/img/goback.png" class="img-fluid" alt="Responsive image" height="30px" width="30px">
+                </a>
+                <div class="d-flex flex-row-reverse">
+                    <h4 class="text-light">
+                        Eliminar contacto
+                    </h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-primary">
+                    <h4 class="alert-heading">¿Seguro que deseas eliminar a <span class="font-weight-bold">@Html.DisplayTextFor(c => c.nombre)</span>?</h4>
+                    <p class="font-italic">
+                        Al precionar "Aceptar"", estaras eliminando todo registro de este contacto en la base de datos.
+                    </p>
+                    <hr />
+                    <form action="@Url.Action("Eliminar","Contacto")", method="post">
+                        <div class="d-flex flex-row-reverse">
+                            <input type="hidden" class="form-control" name="id" value="@Html.DisplayTextFor(i => i.idcontacto)" />
+                            <button class="btn btn-warning" type="submit">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

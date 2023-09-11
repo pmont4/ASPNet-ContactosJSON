@@ -26,17 +26,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
             }
         }
 
-        public Contacto? getContacto(int id)
-        {
-            foreach(Contacto contacto in this.getListaContactos())
-            {
-                if (contacto.idcontacto == id)
-                {
-                    return contacto;
-                }
-            }
-            return null;
-        }
+        public Contacto? getContacto(int? id) => this.getListaContactos().Where(c => c.idcontacto == id).FirstOrDefault();
         
         public void addContacto(String nombre, String correo)
         {
@@ -68,9 +58,12 @@ namespace ASPWeb_Demo2.Controllers.Managers
                 {
                     if (lista.Remove(c))
                     {
+                        var noDupes = lista.OrderBy(x => x.idcontacto).ToHashSet();
+                        var nuevaLista = noDupes.ToList();
+
                         try
                         {
-                            Task task = Task.Run(() => this.writeContactoJSONFile(lista));
+                            Task task = Task.Run(() => this.writeContactoJSONFile(nuevaLista));
                             task.Start();
                         }
                         catch (Exception e)

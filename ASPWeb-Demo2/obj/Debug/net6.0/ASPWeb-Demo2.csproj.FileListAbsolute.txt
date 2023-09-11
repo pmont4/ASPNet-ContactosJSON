@@ -32,3 +32,6 @@ C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\obj\Debug\net6.0\ASPWeb-De
 C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\obj\Debug\net6.0\ASPWeb-Demo2.genruntimeconfig.cache
 C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\obj\Debug\net6.0\ref\ASPWeb-Demo2.dll
 C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\json\contactos.json
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\libman.json
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\obj\Debug\net6.0\ASPWeb_Demo2.Properties.Resources.resources
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\obj\Debug\net6.0\ASPWeb-Demo2.csproj.GenerateResource.cache

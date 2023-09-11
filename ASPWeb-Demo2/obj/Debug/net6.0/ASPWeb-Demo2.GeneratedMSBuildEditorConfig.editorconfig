@@ -20,6 +20,14 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdG9cQ3JlYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/EJRKC/source/repos/ASPWeb-Demo2/ASPWeb-Demo2/Views/Contacto/Editar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdG9cRWRpdGFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/EJRKC/source/repos/ASPWeb-Demo2/ASPWeb-Demo2/Views/Contacto/Eliminar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdG9cRWxpbWluYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/EJRKC/source/repos/ASPWeb-Demo2/ASPWeb-Demo2/Views/Contacto/Inicio.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdG9cSW5pY2lvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
