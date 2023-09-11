@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "zI87wCamo5LR6rnfRyiemK+KstPnBOfdM1+/g/tgWd4=",
+  "Hash": "x9PummBfzr16zDfOUl/CrMV1+YGedbd6/3qLASp6e5o=",
   "Source": "ASPWeb-Demo2",
   "BasePath": "_content/ASPWeb-Demo2",
   "Mode": "Default",
@@ -83,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\wwwroot\\img\\logo.png",
+      "SourceId": "ASPWeb-Demo2",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\wwwroot\\",
+      "BasePath": "_content/ASPWeb-Demo2",
+      "RelativePath": "img/logo.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\logo.png"
     },
     {
       "Identity": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\wwwroot\\js\\site.js",

@@ -43,5 +43,15 @@
     "idcontacto": 9,
     "nombre": "Hector",
     "correo": "hector@gmail.com"
+  },
+  {
+    "idcontacto": 10,
+    "nombre": "Paco",
+    "correo": "paco@gmail.com"
+  },
+  {
+    "idcontacto": 11,
+    "nombre": "Tomas",
+    "correo": "tomas@gmail.com"
   }
 ]

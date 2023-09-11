@@ -12,7 +12,7 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header">
-                <ul class="nav nav-pills card-header-pills">
+                <ul class="nav nav-pills nav-fill">
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Contacto" asp-action="Inicio">Lista</a>
                     </li>
@@ -32,6 +32,7 @@
                     </div>
                     <div class="d-flex flex-row-reverse">
                         <button type="submit" class="btn btn-success">Registrar</button>
+                        <a class="btn btn-warning text-white" href="@Url.Action("Inicio", "Contacto") ">Regresar</a>
                     </div>
                 </form>
             </div>

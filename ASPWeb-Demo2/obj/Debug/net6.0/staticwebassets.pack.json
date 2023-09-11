@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\wwwroot\\img\\logo.png",
+      "PackagePath": "staticwebassets\\img\\logo.png"
+    },
+    {
       "Id": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

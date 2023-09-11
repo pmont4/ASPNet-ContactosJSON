@@ -22,7 +22,11 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Crear(string nombre, string correo)
         {
-            contactoManager.addContacto(nombre, correo);
+            if ((nombre != null && nombre != string.Empty) && (correo != null && correo != string.Empty)) 
+            {
+                contactoManager.addContacto(nombre, correo);
+                return RedirectToAction("Inicio", "Contacto");
+            }
             return View();
         }
     }
