@@ -8,7 +8,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
     {
         public ContactoManager() { }
 
-        private const string linkToJsonFile = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\contactos.json";
+        private volatile string linkToJsonFile = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\contactos.json";
 
         public List<Contacto>? getListaContactos()
         {
@@ -40,7 +40,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
             try
             {
-                Task task = Task.Run(() => this.writeContactoJSONFile(contactos));
+                Task task = Task.Run(() => this.updateJson(contactos));
                 task.Start();
             }
             catch (Exception e)
@@ -58,12 +58,11 @@ namespace ASPWeb_Demo2.Controllers.Managers
                 {
                     if (lista.Remove(c))
                     {
-                        var noDupes = lista.OrderBy(x => x.idcontacto).ToHashSet();
-                        var nuevaLista = noDupes.ToList();
+                        var nuevaLista = lista.OrderBy(x => x.idcontacto).ToList();
 
                         try
                         {
-                            Task task = Task.Run(() => this.writeContactoJSONFile(nuevaLista));
+                            Task task = Task.Run(() => this.updateJson(nuevaLista));
                             task.Start();
                         }
                         catch (Exception e)
@@ -87,13 +86,11 @@ namespace ASPWeb_Demo2.Controllers.Managers
                     {
                         Contacto contacto = new Contacto(id, nombre, correo);
                         lista.Add(contacto);
-
-                        var noDupes = lista.OrderBy(x => x.idcontacto).ToHashSet();
-                        var nuevaLista = noDupes.ToList();
+                        var nuevaLista = lista.OrderBy(x => x.idcontacto).ToList();
 
                         try
                         {
-                            Task task = Task.Run(() => this.writeContactoJSONFile(nuevaLista));
+                            Task task = Task.Run(() => this.updateJson(nuevaLista));
                             task.Start();
                         }
                         catch (Exception e)
@@ -107,15 +104,23 @@ namespace ASPWeb_Demo2.Controllers.Managers
             }
         }
 
-        private async void writeContactoJSONFile(object? escritura)
+        private void updateJson<T>(List<T>? toWrite)
         {
-            File.WriteAllText(linkToJsonFile, string.Empty);
-
-            string json = JsonConvert.SerializeObject(escritura, Formatting.Indented);
-            using (StreamWriter writer = File.AppendText(linkToJsonFile))
+            if (toWrite != null && toWrite.Count > 0)
             {
-                writer.Write(json);
+                var noDupes = toWrite.ToHashSet();
+                var nuevaList = noDupes.ToList();
+
+                File.WriteAllText(linkToJsonFile, string.Empty);
+
+                string json = JsonConvert.SerializeObject(nuevaList, Formatting.Indented);
+                using (StreamWriter writer = File.AppendText(linkToJsonFile))
+                {
+                    writer.Write(json);
+                }
             }
         }
+
     }
+
 }

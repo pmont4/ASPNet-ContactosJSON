@@ -3,4 +3,25 @@
     ViewData["title"] = "Inicio de sesion";
 }
 
+<div class="row" style="margin-top:80px">
+    <div class="col-sm-12">
+        <div class="card">
+            <h3 class="card-header bg-primary text-light">Inicio de sesion</h3>
+            <div class="card-body">
+                <form action="@Url.Action("Login","LogIn")" method="post">
+                    <div class="form-outline mb-4">
+                        <input type="text" class="form-control" name="nombre" />
+                        <label class="form-label">Usuario</label>
+                    </div>
 
+                    <div class="form-outline mb-4">
+                        <input type="password" class="form-control" name="contrasena" />
+                        <label class="form-label">Contraseña</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block mb-4">Iniciar sesion</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

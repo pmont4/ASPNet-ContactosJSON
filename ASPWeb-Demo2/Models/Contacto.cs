@@ -15,16 +15,13 @@ namespace ASPWeb_Demo2.Models
         }
 
         public int idcontacto { get; set; }
+
         public string nombre { get; set; }
+
         public string correo { get; set; }
 
         public override bool Equals(object obj)
         { 
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
             return base.Equals(obj);    
         }
 
