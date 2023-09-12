@@ -15,6 +15,10 @@ namespace ASPWeb_Demo2.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Registrar() { return View(); }
+
+
         [HttpPost]
         public IActionResult Login(string nombre, string contrasena, bool check)
         {

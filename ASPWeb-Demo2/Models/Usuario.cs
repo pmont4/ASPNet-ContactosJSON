@@ -9,10 +9,11 @@ namespace ASPWeb_Demo2.Models
 
         public Usuario() { }
 
-        public Usuario(int idUsuario, string nombre, string contrasena, string? fechaSesion) 
+        public Usuario(int idUsuario, string nombre, string correo, string contrasena, string? fechaSesion) 
         {
             this.idUsuario = idUsuario;
             this.nombre = nombre;
+            this.correo = correo;
             this.contrasena = contrasena;
             this.fechaSesion = fechaSesion;
         }
@@ -20,6 +21,8 @@ namespace ASPWeb_Demo2.Models
         public int idUsuario {  get; set; }
 
         public string nombre { get; set; }
+
+        public string correo { get; set; }
 
         public string contrasena { get; set; }
         public string? fechaSesion {  get; set; }
