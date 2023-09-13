@@ -2,7 +2,7 @@
 
 namespace ASPWeb_Demo2.Models
 {
-
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [Serializable]
     public class Usuario
     {
@@ -18,14 +18,40 @@ namespace ASPWeb_Demo2.Models
             this.fechaSesion = fechaSesion;
         }
 
-        public int idUsuario {  get; set; }
+        [JsonProperty("idUsuario")]
+        private int idUsuario;
 
-        public string nombre { get; set; }
+        [JsonProperty("nombre")]
+        private string nombre;
 
-        public string correo { get; set; }
+        [JsonProperty("correo")]
+        private string correo;
 
-        public string contrasena { get; set; }
-        public string? fechaSesion {  get; set; }
+        [JsonProperty("contrasena")]
+        private string contrasena;
+
+        [JsonProperty("fechaSesion")]
+        private string? fechaSesion;
+
+        public int getIdUsuario() => this.idUsuario;
+
+        public void setIdUsuario(int id) => this.idUsuario = id;
+
+        public string getNombre() => this.nombre;
+
+        public void setNombre(string nombre) => this.nombre = nombre;
+
+        public string getContrasena() => this.contrasena;
+
+        public void setContrasena(string contrasena) => this.contrasena = contrasena;
+
+        public string getCorreo() => this.correo;
+
+        public void setCorreo(string correo) => this.correo = correo;
+
+        public string? getFechaSesion() => this.fechaSesion;
+
+        public void setFechaSesion(string? fecha) => this.fechaSesion = fecha;
 
         public override bool Equals(object? obj)
         {

@@ -26,13 +26,13 @@ namespace ASPWeb_Demo2.Controllers.Managers
             }
         }
 
-        public Contacto? getContacto(int? id) => this.getListaContactos().Where(c => c.idcontacto == id).FirstOrDefault();
+        public Contacto? getContacto(int? id) => this.getListaContactos().Where(c => c.getIdContacto() == id).FirstOrDefault();
         
         public void addContacto(String nombre, String correo)
         {
             int id = 0;
             List<Contacto> contactos = this.getListaContactos();
-            if (contactos.Count > 0) id = contactos.Last().idcontacto + 1;
+            if (contactos.Count > 0) id = contactos.Last().getIdContacto() + 1;
             else id = 1;
 
             Contacto contacto = new Contacto(id, nombre, correo);
@@ -54,11 +54,11 @@ namespace ASPWeb_Demo2.Controllers.Managers
             List<Contacto> lista = getListaContactos();
             foreach (var c in lista)
             {
-                if (c.idcontacto == id)
+                if (c.getIdContacto() == id)
                 {
                     if (lista.Remove(c))
                     {
-                        var nuevaLista = lista.OrderBy(x => x.idcontacto).ToList();
+                        var nuevaLista = lista.OrderBy(x => x.getIdContacto()).ToList();
 
                         try
                         {
@@ -80,13 +80,17 @@ namespace ASPWeb_Demo2.Controllers.Managers
             List<Contacto> lista = getListaContactos();
             foreach (var c in lista)
             {
-                if (c.idcontacto == id)
+                if (c.getIdContacto() == id)
                 {
                     if (lista.Remove(c))
                     {
-                        Contacto contacto = new Contacto(id, nombre, correo);
+                        Contacto contacto = c;
+
+                        c.setNombre(nombre);
+                        c.setCorreo(correo);
+
                         lista.Add(contacto);
-                        var nuevaLista = lista.OrderBy(x => x.idcontacto).ToList();
+                        var nuevaLista = lista.OrderBy(x => x.getIdContacto()).ToList();
 
                         try
                         {

@@ -46,12 +46,12 @@ namespace ASPWeb_Demo2.Controllers.Managers
             }
         }
 
-        public Usuario? getUsuario(string? nombre) => this.getListaUsuarios().Where(u => u.nombre == nombre).FirstOrDefault();
+        public Usuario? getUsuario(string? nombre) => this.getListaUsuarios().Where(u => u.getNombre() == nombre).FirstOrDefault();
 
         public bool addUsuario(string nombre, string correo, string contrasena)
         {
             int id = 0;
-            if (this.getListaUsuarios().Count() > 0) id = this.getListaUsuarios().Last().idUsuario + 1;
+            if (this.getListaUsuarios().Count() > 0) id = this.getListaUsuarios().Last().getIdUsuario() + 1;
             else id = 1;
 
             Usuario usuario = new Usuario(id, nombre, correo, contrasena, null);
@@ -59,38 +59,33 @@ namespace ASPWeb_Demo2.Controllers.Managers
             List<Usuario> lista = this.getListaUsuarios();
             lista.Add(usuario);
 
-            return this.updateJson(lista.OrderBy(x => x.idUsuario).ToList());
+            return this.updateJson(lista.OrderBy(x => x.getIdUsuario()).ToList());
         }
 
-        public bool verificar(string nombre, string contrasena)
-        {
-            Usuario u = this.getListaUsuarios().Where(x => x.nombre == nombre && x.contrasena == contrasena).FirstOrDefault();
-            return u != null;
-        }
+        public bool verificar(string nombre, string contrasena) => this.getListaUsuarios().Any(u => u.getNombre() == nombre && u.getContrasena() == contrasena); 
 
         public void updateFechaSesion(Usuario usuario)
         {
             List<Usuario> lista = this.getListaUsuarios();
 
-            if (!string.IsNullOrEmpty(usuario.fechaSesion))
+            if (!string.IsNullOrEmpty(usuario.getFechaSesion()))
             {
-                if (DateTime.TryParse(usuario.fechaSesion, out DateTime fechaAnterior))
+                if (DateTime.TryParse(usuario.getFechaSesion(), out DateTime fechaAnterior))
                 {
                     DateTime fechaAhora = DateTime.Now;
                     if (fechaAhora.Day != fechaAnterior.Day)
                     {
-                        usuario.fechaSesion = fechaAnterior.ToString("dd/MM/yyyy");
                         foreach (Usuario u in lista)
                         {
-                            if (u.nombre == usuario.nombre)
+                            if (u.getNombre() == usuario.getNombre())
                             {
                                 Usuario toUpdate = u;
-                                u.fechaSesion = fechaAhora.ToString("dd/MM/yyyy");
+                                toUpdate.setFechaSesion(fechaAhora.ToString("dd/MM/yyyy"));
 
                                 if (lista.Remove(u))
                                 {
                                     lista.Add(toUpdate);
-                                    if (this.updateJson(lista.OrderBy(x => x.idUsuario).ToList())) ;
+                                    if (this.updateJson(lista.OrderBy(x => x.getIdUsuario()).ToList())) ;
                                 }
 
                                 break;
@@ -105,15 +100,15 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
                 foreach (Usuario u in lista)
                 {
-                    if (u.nombre == usuario.nombre)
+                    if (u.getNombre() == usuario.getNombre())
                     {
                         Usuario toUpdate = u;
-                        u.fechaSesion = fechaNueva;
+                        toUpdate.setFechaSesion(fechaNueva);
 
                         if (lista.Remove(u))
                         {
                             lista.Add(toUpdate);
-                            if (this.updateJson(lista.OrderBy(x => x.idUsuario).ToList())) ;
+                            if (this.updateJson(lista.OrderBy(x => x.getIdUsuario()).ToList())) ;
                         }
 
                         break;

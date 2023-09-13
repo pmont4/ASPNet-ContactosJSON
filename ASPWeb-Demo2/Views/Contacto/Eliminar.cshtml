@@ -18,14 +18,14 @@
             </div>
             <div class="card-body">
                 <div class="alert alert-primary">
-                    <h4 class="alert-heading">¿Seguro que deseas eliminar a <span class="font-weight-bold">@Html.DisplayTextFor(c => c.nombre)</span>?</h4>
+                    <h4 class="alert-heading">¿Seguro que deseas eliminar a <span class="font-weight-bold">@Html.DisplayTextFor(c => c.getNombre())</span>?</h4>
                     <p class="font-italic">
                         Al precionar "Aceptar"", estaras eliminando todo registro de este contacto en la base de datos.
                     </p>
                     <hr />
                     <form action="@Url.Action("Eliminar","Contacto")", method="post">
                         <div class="d-flex flex-row-reverse">
-                            <input type="hidden" class="form-control" name="id" value="@Html.DisplayTextFor(i => i.idcontacto)" />
+                            <input type="hidden" class="form-control" name="id" value="@Html.DisplayTextFor(i => i.getIdContacto())" />
                             <button class="btn btn-warning" type="submit">Aceptar</button>
                         </div>
                     </form>

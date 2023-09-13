@@ -83,7 +83,7 @@ namespace ASPWeb_Demo2.Controllers
             Contacto contacto = this.contactoManager.getContacto(id);
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo))
             {
-                if (contacto.nombre != nombre || contacto.correo != correo)
+                if (contacto.getNombre() != nombre || contacto.getCorreo() != correo)
                 {
                     this.contactoManager.updateContacto(id, nombre, correo);
                     return RedirectToAction("Inicio", "Contacto");

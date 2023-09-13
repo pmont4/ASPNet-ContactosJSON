@@ -32,12 +32,12 @@
                                 @foreach (Contacto contacto in Model)
                                 {
                                     <tr>
-                                        <td>@contacto.idcontacto</td>
-                                        <td>@contacto.nombre</td>
-                                        <td>@contacto.correo</td>
+                                        <td>@contacto.getIdContacto()</td>
+                                        <td>@contacto.getNombre()</td>
+                                        <td>@contacto.getCorreo()</td>
                                         <td>
-                                            <a class="btn btn-primary btn-sm" href="@Url.Action("Editar","Contacto", new { id = contacto.idcontacto})">Editar</a>
-                                            <a class="btn btn-danger btn-sm" href="@Url.Action("Eliminar", "Contacto", new { id = contacto.idcontacto })">Eliminar</a>
+                                            <a class="btn btn-primary btn-sm" href="@Url.Action("Editar","Contacto", new { id = contacto.getIdContacto() })">Editar</a>
+                                            <a class="btn btn-danger btn-sm" href="@Url.Action("Eliminar", "Contacto", new { id = contacto.getIdContacto() })">Eliminar</a>
                                         </td>
                                     </tr>
                                 }
