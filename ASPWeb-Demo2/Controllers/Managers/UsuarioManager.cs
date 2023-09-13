@@ -48,6 +48,20 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
         public Usuario? getUsuario(string? nombre) => this.getListaUsuarios().Where(u => u.nombre == nombre).FirstOrDefault();
 
+        public bool addUsuario(string nombre, string correo, string contrasena)
+        {
+            int id = 0;
+            if (this.getListaUsuarios().Count() > 0) id = this.getListaUsuarios().Last().idUsuario + 1;
+            else id = 1;
+
+            Usuario usuario = new Usuario(id, nombre, correo, contrasena, null);
+
+            List<Usuario> lista = this.getListaUsuarios();
+            lista.Add(usuario);
+
+            return this.updateJson(lista.OrderBy(x => x.idUsuario).ToList());
+        }
+
         public bool verificar(string nombre, string contrasena)
         {
             Usuario u = this.getListaUsuarios().Where(x => x.nombre == nombre && x.contrasena == contrasena).FirstOrDefault();

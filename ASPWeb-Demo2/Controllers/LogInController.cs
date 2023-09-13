@@ -10,13 +10,10 @@ namespace ASPWeb_Demo2.Controllers
         private UsuarioManager usuarioManager = new UsuarioManager();
 
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
         [HttpGet]
-        public IActionResult Registrar() { return View(); }
+        public IActionResult Registrar() => View();
 
 
         [HttpPost]
@@ -40,6 +37,24 @@ namespace ASPWeb_Demo2.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        public IActionResult Registrar(string nombre, string correo, string contrasena)
+        {
+            if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo) && !string.IsNullOrEmpty(contrasena))
+            {
+                if (this.verifyContrasena(contrasena))
+                {
+                    if (this.usuarioManager.addUsuario(nombre, correo, contrasena))
+                    {
+                        return RedirectToAction("Login", "LogIn");
+                    }
+                    else return View();
+                } else return View();
+            } else return View();
+        }
+
+        private bool verifyContrasena(string input) => input.Length >= 8 && input.Any(c => char.IsUpper(c)) && input.Any(c => char.IsDigit(c));
 
     }
 }

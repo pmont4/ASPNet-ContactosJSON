@@ -11,10 +11,7 @@ namespace ASPWeb_Demo2.Controllers
         private readonly ContactoManager contactoManager = new ContactoManager();
 
         [HttpGet]
-        public IActionResult Inicio()
-        {
-            return View(contactoManager.getListaContactos());
-        }
+        public IActionResult Inicio() => View(this.contactoManager.getListaContactos());
 
         /*
          * 
@@ -23,10 +20,7 @@ namespace ASPWeb_Demo2.Controllers
          */
 
         [HttpGet]
-        public IActionResult Crear()
-        {
-            return View();
-        }
+        public IActionResult Crear() => View();
 
         /*
          * 

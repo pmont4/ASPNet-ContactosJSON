@@ -1,13 +1,13 @@
 ﻿@{
     Layout = "_LogInLayout";
-    ViewData["title"] = "Inicio de sesion";
+    ViewData["title"] = "Registro";
 }
 
 <div class="h-100 d-flex align-items-center justify-content-center">
-    <div class="col-sm-7" style="margin-top: 90px">
+    <div class="col-sm-7" style="margin-top: 70px">
         <div class="shadow-sm p-3 mb-5 bg-white rounded">
             <div class="card">
-                <div class="card-header flex-md-row bg-primary text-white">
+                <div class="card-header flex-md-row bg-warning text-white">
                     <div class="d-flex justify-content-end">
                         <img src="~/img/logo.png" class="img-fluid" alt="Responsive image" height="50px" width="50px">
                     </div>
@@ -16,10 +16,15 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="@Url.Action("Login","LogIn")" method="post">
+                    <form action="@Url.Action("Registrar","LogIn")" method="post">
                         <div class="form-outline mb-4">
                             <input type="text" class="form-control" name="nombre" />
                             <label class="form-label">Usuario</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <input type="email" class="form-control" name="correo" />
+                            <label class="form-label">Correo electronico</label>
                         </div>
 
                         <div class="form-outline mb-4">
@@ -30,12 +35,12 @@
                         <div class="row mb-4">
                             <div class="col d-flex justify-content-center">
                                 <div class="form-check">
-                                    <p>No es miembro? Registrese <span><a href="@Url.Action("Registrar","LogIn")" style="font-weight: bold">aca</a></span></p>
+                                    <p>¿Ya es miembro? Inicie sesion <span><a href="@Url.Action("Login","LogIn")" style="font-weight: bold">aca</a></span></p>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-success btn-block mb-4">Iniciar sesion</button>
+                        <button type="submit" class="btn btn-success btn-block mb-4">Registrar</button>
                     </form>
                 </div>
             </div>
