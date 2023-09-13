@@ -64,57 +64,64 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
         public bool verificar(string nombre, string contrasena) => this.getListaUsuarios().Any(u => u.getNombre() == nombre && u.getContrasena() == contrasena); 
 
-        public void updateFechaSesion(Usuario usuario)
+        public string crearSesion(Usuario usuario)
         {
             List<Usuario> lista = this.getListaUsuarios();
-
-            if (!string.IsNullOrEmpty(usuario.getFechaSesion()))
+            if (lista.Count > 0)
             {
-                if (DateTime.TryParse(usuario.getFechaSesion(), out DateTime fechaAnterior))
-                {
-                    DateTime fechaAhora = DateTime.Now;
-                    if (fechaAhora.Day != fechaAnterior.Day)
-                    {
-                        foreach (Usuario u in lista)
-                        {
-                            if (u.getNombre() == usuario.getNombre())
-                            {
-                                Usuario toUpdate = u;
-                                toUpdate.setFechaSesion(fechaAhora.ToString("dd/MM/yyyy"));
-
-                                if (lista.Remove(u))
-                                {
-                                    lista.Add(toUpdate);
-                                    if (this.updateJson(lista.OrderBy(x => x.getIdUsuario()).ToList())) ;
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                string fechaNueva = DateTime.Now.ToString("dd/MM/yyyy");
-
-                foreach (Usuario u in lista)
+                foreach(Usuario u in lista)
                 {
                     if (u.getNombre() == usuario.getNombre())
                     {
-                        Usuario toUpdate = u;
-                        toUpdate.setFechaSesion(fechaNueva);
-
                         if (lista.Remove(u))
                         {
-                            lista.Add(toUpdate);
-                            if (this.updateJson(lista.OrderBy(x => x.getIdUsuario()).ToList())) ;
-                        }
+                            usuario = u;
+                            if (u.getSesiones() != null)
+                            {
+                                List<Sesion> lista_sesiones_old = u.getSesiones();
+                                if (lista_sesiones_old.Count > 0)
+                                {
+                                    if (!lista_sesiones_old.Any(s => s.getFecha() == DateTime.Now.ToString("dd/MM/yyyy")))
+                                    {
+                                        Sesion sesion = new Sesion();
+                                        sesion.setIdSesion(lista_sesiones_old.Last().getIdSesion() + 1);
+                                        sesion.setFecha(DateTime.Now.ToString("dd/MM/yyyy"));
+                                        sesion.setRegistros(new List<string>());
+                                        lista_sesiones_old.Add(sesion);
+                                        usuario.setSesiones(lista_sesiones_old.OrderBy(x => x.getIdSesion()).ToList());
 
-                        break;
+                                        lista.Add(usuario);
+                                        if (this.updateJson(lista))
+                                        {
+                                            return "Lista actualizada con exito.";
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                List<Sesion> nueva_lista = new List<Sesion>();
+                                Sesion sesion = new Sesion();
+                                sesion.setIdSesion(1);
+                                sesion.setFecha(DateTime.Now.ToString("dd/MM/yyyy"));
+                                sesion.setRegistros(new List<string>());
+                                nueva_lista.Add(sesion);
+                                usuario.setSesiones(nueva_lista.OrderBy(x => x.getIdSesion()).ToList());
+
+                                lista.Add(usuario);
+                                if (this.updateJson(lista))
+                                {
+                                    return "Lista actualizada con exito.";
+                                }
+                            }
+                            
+                            return JsonConvert.SerializeObject(lista, Formatting.Indented);
+                        }
                     }
                 }
             }
+
+            return "No se pudo actualizar la lista.";
         }
 
     }

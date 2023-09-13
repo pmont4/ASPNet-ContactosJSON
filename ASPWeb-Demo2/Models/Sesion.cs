@@ -9,6 +9,12 @@ namespace ASPWeb_Demo2.Models
     {
 
         public Sesion() { }
+        public Sesion(int idSesion, string fecha, List<string>? registros)
+        {
+            this.idSesion = idSesion;
+            this.fecha = fecha;
+            this.registros = registros;
+        }
 
         [JsonProperty("idSesion")]
         private int idSesion;
@@ -17,7 +23,7 @@ namespace ASPWeb_Demo2.Models
         private string fecha;
 
         [JsonProperty("registros")]
-        private List<string> registros;
+        private List<string>? registros;
 
         public int getIdSesion() => this.idSesion;
 
@@ -25,9 +31,11 @@ namespace ASPWeb_Demo2.Models
 
         public string getFecha() => this.fecha;
 
-        public List<string> getRegistros() => this.registros;
+        public void setFecha(string fecha) => this.fecha = fecha;
 
-        public void setRegistros(List<string> registros) => this.registros = registros;
+        public List<string>? getRegistros() => this.registros;
+
+        public void setRegistros(List<string>? registros) => this.registros = registros;
 
         public override bool Equals(object? obj)
         {

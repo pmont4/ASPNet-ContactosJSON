@@ -36,7 +36,7 @@ namespace ASPWeb_Demo2.Controllers
             {
                 if (usuarioManager.verificar(nombre, contrasena))
                 {
-                    Task task = Task.Run(() => this.usuarioManager.updateFechaSesion(usuario));
+                    Console.WriteLine(this.usuarioManager.crearSesion(usuario));
 
                     return RedirectToAction("Inicio","Contacto");
                 } else return View();

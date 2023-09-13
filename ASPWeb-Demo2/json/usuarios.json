@@ -4,13 +4,12 @@
     "nombre": "pulito",
     "correo": "pulito@gmail.com",
     "contrasena": "Monterroso2005",
-    "fechaSesion": "13/09/2023"
-  },
-  {
-    "idUsuario": 3,
-    "nombre": "dylan",
-    "correo": "dylan@gmail.com",
-    "contrasena": "Dylanguate1",
-    "fechaSesion": "13/09/2023"
+    "sesiones": [
+      {
+        "idSesion": 1,
+        "fecha": "13/09/2023",
+        "registros": []
+      }
+    ]
   }
 ]

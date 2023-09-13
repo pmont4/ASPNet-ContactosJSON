@@ -9,13 +9,13 @@ namespace ASPWeb_Demo2.Models
 
         public Usuario() { }
 
-        public Usuario(int idUsuario, string nombre, string correo, string contrasena, string? fechaSesion) 
+        public Usuario(int idUsuario, string nombre, string correo, string contrasena, List<Sesion>? sesiones) 
         {
             this.idUsuario = idUsuario;
             this.nombre = nombre;
             this.correo = correo;
             this.contrasena = contrasena;
-            this.fechaSesion = fechaSesion;
+            this.sesiones = sesiones;
         }
 
         [JsonProperty("idUsuario")]
@@ -30,8 +30,8 @@ namespace ASPWeb_Demo2.Models
         [JsonProperty("contrasena")]
         private string contrasena;
 
-        [JsonProperty("fechaSesion")]
-        private string? fechaSesion;
+        [JsonProperty("sesiones")]
+        private List<Sesion>? sesiones;
 
         public int getIdUsuario() => this.idUsuario;
 
@@ -49,9 +49,9 @@ namespace ASPWeb_Demo2.Models
 
         public void setCorreo(string correo) => this.correo = correo;
 
-        public string? getFechaSesion() => this.fechaSesion;
+        public List<Sesion>? getSesiones() => this.sesiones;
 
-        public void setFechaSesion(string? fecha) => this.fechaSesion = fecha;
+        public void setSesiones(List<Sesion>? sesiones) => this.sesiones = sesiones;
 
         public override bool Equals(object? obj)
         {
