@@ -114,8 +114,6 @@ namespace ASPWeb_Demo2.Controllers.Managers
                                     return "Lista actualizada con exito.";
                                 }
                             }
-                            
-                            return JsonConvert.SerializeObject(lista, Formatting.Indented);
                         }
                     }
                 }
