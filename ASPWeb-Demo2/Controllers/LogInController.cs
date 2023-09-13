@@ -48,8 +48,7 @@ namespace ASPWeb_Demo2.Controllers
                     if (this.usuarioManager.addUsuario(nombre, correo, contrasena))
                     {
                         return RedirectToAction("Login", "LogIn");
-                    }
-                    else return View();
+                    } else return View();
                 } else return View();
             } else return View();
         }
