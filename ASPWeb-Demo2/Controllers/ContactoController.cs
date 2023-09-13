@@ -68,8 +68,7 @@ namespace ASPWeb_Demo2.Controllers
                 contactoManager.addContacto(nombre, correo);
 
                 return RedirectToAction("Inicio", "Contacto");
-            }
-            return View();
+            } else return View();
         }
 
         /*
@@ -88,10 +87,8 @@ namespace ASPWeb_Demo2.Controllers
                 {
                     this.contactoManager.updateContacto(id, nombre, correo);
                     return RedirectToAction("Inicio", "Contacto");
-                }
-                else return View(contacto);
-            }
-            else return View(contacto);
+                } else return View(contacto);
+            } else return View(contacto);
         }
 
         /*

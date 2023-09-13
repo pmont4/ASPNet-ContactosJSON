@@ -31,7 +31,6 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Login(string nombre, string contrasena, bool check)
         {
-            Console.WriteLine(check);
             Usuario usuario = this.usuarioManager.getUsuario(nombre);
             if (usuario != null && !(string.IsNullOrEmpty(nombre) && string.IsNullOrEmpty(contrasena))) 
             {
@@ -40,14 +39,8 @@ namespace ASPWeb_Demo2.Controllers
                     Task task = Task.Run(() => this.usuarioManager.updateFechaSesion(usuario));
 
                     return RedirectToAction("Inicio","Contacto");
-                } else
-                {
-                    return View();
-                }
-            } else
-            {
-                return View();
-            }
+                } else return View();
+            } else return View();
         }
 
         /*
