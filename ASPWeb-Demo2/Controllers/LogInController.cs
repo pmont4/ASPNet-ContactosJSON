@@ -9,12 +9,24 @@ namespace ASPWeb_Demo2.Controllers
 
         private UsuarioManager usuarioManager = new UsuarioManager();
 
+        /*
+         * Unicamente muestra la vista LogIn
+         */
+
         [HttpGet]
         public IActionResult Login() => View();
+
+        /*
+         * Unicamente muestra la vista registrar
+         */
 
         [HttpGet]
         public IActionResult Registrar() => View();
 
+
+        /*
+         * Es el metodo que lleva acabo la accion de LogIn
+         */
 
         [HttpPost]
         public IActionResult Login(string nombre, string contrasena, bool check)
@@ -37,6 +49,10 @@ namespace ASPWeb_Demo2.Controllers
                 return View();
             }
         }
+
+        /*
+         * Es el metodo que lleva acabo la accion de registro
+         */
 
         [HttpPost]
         public IActionResult Registrar(string nombre, string correo, string contrasena)
