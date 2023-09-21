@@ -8,10 +8,11 @@ namespace ASPWeb_Demo2.Controllers
     public class ContactoController : Controller
     {
 
-        private readonly ContactoManager contactoManager = new ContactoManager();
+        private ContactoManager contactoManager = new ContactoManager();
+        private volatile UsuarioManager usuarioManager = new UsuarioManager();
 
         [HttpGet]
-        public IActionResult Inicio() => View(this.contactoManager.getListaContactos());
+        public IActionResult Inicio() => View(this.GetContactoManager().getListaContactos());
 
         /*
          * 
@@ -33,7 +34,7 @@ namespace ASPWeb_Demo2.Controllers
         {
             if (id != null)
             {
-                Contacto contacto = this.contactoManager.getContacto(id);
+                Contacto contacto = this.GetContactoManager().getContacto(id);
                 return View(contacto);
             } else return RedirectToAction("Inicio", "Contacto");
         }
@@ -49,7 +50,7 @@ namespace ASPWeb_Demo2.Controllers
         {
             if (id == null) return RedirectToAction("Inicio", "Contacto");
 
-            Contacto c = this.contactoManager.getContacto(id);
+            Contacto c = this.GetContactoManager().getContacto(id);
 
             return View(c);
         }
@@ -65,8 +66,10 @@ namespace ASPWeb_Demo2.Controllers
         {
             if (string.IsNullOrEmpty(nombre) && string.IsNullOrEmpty(correo))
             {
-                contactoManager.addContacto(nombre, correo);
-
+                if (this.GetContactoManager().addContacto(nombre, correo))
+                {
+                    Console.WriteLine(this.GetUsuarioManager().updateRegistroUsuario(this.RegistroFormato("crear", nombre)));
+                }
                 return RedirectToAction("Inicio", "Contacto");
             } else return View();
         }
@@ -80,12 +83,15 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Editar(int id, string nombre, string correo)
         {
-            Contacto contacto = this.contactoManager.getContacto(id);
+            Contacto contacto = this.GetContactoManager().getContacto(id);
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo))
             {
                 if (contacto.getNombre() != nombre || contacto.getCorreo() != correo)
                 {
-                    this.contactoManager.updateContacto(id, nombre, correo);
+                    if (this.GetContactoManager().updateContacto(id, nombre, correo))
+                    {
+                        Console.WriteLine(this.GetUsuarioManager().updateRegistroUsuario(this.RegistroFormato("editar", nombre)));
+                    }
                     return RedirectToAction("Inicio", "Contacto");
                 } else return View(contacto);
             } else return View(contacto);
@@ -100,11 +106,30 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Eliminar(int id) 
         {
-            Contacto contacto = this.contactoManager.getContacto(id);
-            this.contactoManager.removeContacto(id);
+            Contacto contacto = this.GetContactoManager().getContacto(id);
+            if (this.GetContactoManager().removeContacto(id))
+            {
+                Console.WriteLine(this.GetUsuarioManager().updateRegistroUsuario(this.RegistroFormato("eliminar", id)));
+            }
             return RedirectToAction("Inicio", "Contacto");
         }
 
+        private string RegistroFormato(string accion, object identificador)
+        {
+            if (identificador.GetType() == typeof(string) || identificador.GetType() == typeof(int))
+            {
+                switch (accion)
+                {
+                    case "crear": return ("ha creado al usuario " + identificador);
+                    case "editar": return ("ha editado al usuario " + identificador);
+                    case "eliminar": return ("ha eliminado al usuario " + identificador);
+                }
+            }
+            return "";
+        }
+
+        private ContactoManager GetContactoManager() => this.contactoManager;
+        private UsuarioManager GetUsuarioManager() => this.usuarioManager;
     }
 
 }

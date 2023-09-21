@@ -32,7 +32,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
             return this.GetJsonUtils().updateJson(contactos.OrderBy(c => c.getIdContacto()).ToList());
         }
 
-        public void removeContacto(int id)
+        public bool removeContacto(int id)
         {
             List<Contacto>? lista = this.getListaContactos();
             if (lista.Count > 0)
@@ -43,17 +43,17 @@ namespace ASPWeb_Demo2.Controllers.Managers
                     if (lista.Remove(c))
                     {
                         List<Contacto> nueva = lista.OrderBy(x => x.getIdContacto()).ToList();
-                        this.GetJsonUtils().updateJson(nueva.OrderBy(c => c.getIdContacto()).ToList());
+                        return this.GetJsonUtils().updateJson(nueva.OrderBy(c => c.getIdContacto()).ToList());
                     }
-                    else return;
+                    else return false;
                 }
-                else return;
+                else return false;
             }
-            else return;
+            else return false;
 
         }
 
-        public void updateContacto(int id, string nombre, string correo)
+        public bool updateContacto(int id, string nombre, string correo)
         {
             List<Contacto>? lista = this.getListaContactos();
             Contacto? c = lista.Where(x => x.getIdContacto().Equals(id)).FirstOrDefault();
@@ -67,8 +67,9 @@ namespace ASPWeb_Demo2.Controllers.Managers
                 lista.Add(contacto);
                 List<Contacto> nuevaLista = lista.OrderBy(x => x.getIdContacto()).ToList();
 
-                this.GetJsonUtils().updateJson(nuevaLista);
+                return this.GetJsonUtils().updateJson(nuevaLista);
             }
+            return false;
 
         }
 

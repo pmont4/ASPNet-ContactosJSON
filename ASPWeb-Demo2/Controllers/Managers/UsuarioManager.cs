@@ -118,7 +118,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
                                     registro.setIdRegistro(id_registro);
                                     registro.setFecha(DateTime.Now.ToString("dd/MM/yyyy-HH:mm"));
-                                    registro.setTexto(mensaje.Trim());
+                                    registro.setTexto(id_registro + " - " + mensaje.Trim());
 
                                     lista_registros.Add(registro);
                                     sesionToUpdate.setRegistros(lista_registros);
@@ -158,7 +158,6 @@ namespace ASPWeb_Demo2.Controllers.Managers
             this.usuarioActual = usuarioActual;
         }
         
-
         private JsonUtils getJsonUtils() => this.jsonUtils;
 
     }
