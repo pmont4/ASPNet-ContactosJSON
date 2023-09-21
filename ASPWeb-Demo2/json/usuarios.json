@@ -9,6 +9,11 @@
         "idSesion": 1,
         "fecha": "13/09/2023",
         "registros": []
+      },
+      {
+        "idSesion": 2,
+        "fecha": "21/09/2023",
+        "registros": []
       }
     ]
   }
