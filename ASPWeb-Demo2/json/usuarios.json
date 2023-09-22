@@ -4,6 +4,7 @@
     "nombre": "pulito",
     "correo": "pulito@gmail.com",
     "contrasena": "Monterroso2005",
+    "ipv4": "172.20.12.171",
     "sesiones": [
       {
         "idSesion": 1,
@@ -14,6 +15,18 @@
         "idSesion": 2,
         "fecha": "21/09/2023",
         "registros": []
+      },
+      {
+        "idSesion": 3,
+        "fecha": "22/09/2023",
+        "registros": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
       }
     ]
   }

@@ -16,25 +16,13 @@ namespace ASPWeb_Demo2.Models
         }
 
         [JsonProperty("idContacto")]
-        private int idcontacto;
+        public int idcontacto { get; set; }
 
         [JsonProperty("nombre")]
-        private string nombre;
+        public string nombre { get; set; }
 
         [JsonProperty("correo")]
-        private string correo;
-
-        public int getIdContacto() => this.idcontacto;
-
-        public void setIdContacto(int id) => this.idcontacto = id;
-
-        public string getNombre() => this.nombre;
-
-        public void setNombre(string nombre) => this.nombre = nombre;
-
-        public string getCorreo() => this.correo;
-
-        public void setCorreo(string correo) => this.correo = correo;
+        public string correo { get; set; }
 
         public override bool Equals(object obj)
         { 

@@ -7,8 +7,6 @@ namespace ASPWeb_Demo2.Controllers
     public class LogInController : Controller
     {
 
-        private UsuarioManager usuarioManager = new UsuarioManager();
-
         /*
          * Unicamente muestra la vista LogIn
          */
@@ -31,16 +29,14 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Login(string nombre, string contrasena, bool check)
         {
-            Usuario usuario = this.usuarioManager.getUsuario(nombre);
+            UsuarioManager usuarioManager = new UsuarioManager();
+
+            Usuario usuario = usuarioManager.getUsuario(nombre);
             if (usuario != null && !(string.IsNullOrEmpty(nombre) && string.IsNullOrEmpty(contrasena))) 
             {
                 if (usuarioManager.verificar(nombre, contrasena))
                 {
-                    Task t = Task.Run(() =>
-                    {
-                        Console.WriteLine(this.usuarioManager.crearSesion(usuario));
-                    }); 
-
+                    Console.WriteLine(usuarioManager.crearSesion(usuario));
                     return RedirectToAction("Inicio","Contacto");
                 } else return View();
             } else return View();
@@ -53,11 +49,12 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Registrar(string nombre, string correo, string contrasena)
         {
+            UsuarioManager usuarioManager = new UsuarioManager();
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo) && !string.IsNullOrEmpty(contrasena))
             {
                 if (this.verifyContrasena(contrasena))
                 {
-                    if (this.usuarioManager.addUsuario(nombre, correo, contrasena))
+                    if (usuarioManager.addUsuario(nombre, correo, contrasena))
                     {
                         return RedirectToAction("Login", "LogIn");
                     } else return View();

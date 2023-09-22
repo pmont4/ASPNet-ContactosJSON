@@ -1,5 +1,7 @@
 ﻿using ASPWeb_Demo2.Models;
 using ASPWeb_Demo2.Util;
+using System.Net.Sockets;
+using System.Net;
 
 namespace ASPWeb_Demo2.Controllers.Managers
 {
@@ -15,6 +17,11 @@ namespace ASPWeb_Demo2.Controllers.Managers
             jsonUtils = new JsonUtils(linkToJsonFile);
         }
 
+        public UsuarioManager(Usuario uActual)
+        {
+            jsonUtils = new JsonUtils(linkToJsonFile);
+        }
+
         public List<Usuario>? getListaUsuarios() => this.getJsonUtils().deserealizeObjectFromJsonFile<List<Usuario>>();
 
         public Usuario? getUsuario(string? nombre) => this.getListaUsuarios().Where(u => u.getNombre() == nombre).FirstOrDefault();
@@ -25,7 +32,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
             if (this.getListaUsuarios().Count() > 0) id = this.getListaUsuarios().Last().getIdUsuario() + 1;
             else id = 1;
 
-            Usuario usuario = new Usuario(id, nombre, correo, contrasena, null);
+            Usuario usuario = new Usuario(id, nombre, correo, contrasena, this.getIpv4Adress(), null);
 
             List<Usuario> lista = this.getListaUsuarios();
             lista.Add(usuario);
@@ -47,6 +54,16 @@ namespace ASPWeb_Demo2.Controllers.Managers
                     usuario = u;
                     if (lista.Remove(u))
                     {
+                        string? current_ipv4 = usuario.getIpv4();
+
+                        if (current_ipv4 == null)
+                        {
+                            usuario.setIpv4(this.getIpv4Adress());
+                        } else if (current_ipv4 != this.getIpv4Adress())
+                        {
+                            usuario.setIpv4(this.getIpv4Adress());
+                        }
+
                         if (u.getSesiones() != null)
                         {
                             List<Sesion>? lista_sesiones_old = u.getSesiones();
@@ -62,7 +79,6 @@ namespace ASPWeb_Demo2.Controllers.Managers
                                     usuario.setSesiones(lista_sesiones_old.OrderBy(x => x.getIdSesion()).ToList());
 
                                     lista.Add(usuario);
-
                                     if (this.getJsonUtils().updateJson(lista)) return "Lista actualizada con exito.";
                                 }
                             }
@@ -81,22 +97,23 @@ namespace ASPWeb_Demo2.Controllers.Managers
                             if (this.getJsonUtils().updateJson(lista)) return "Lista actualizada con exito.";
                         }
 
-                        this.setUsuarioActual(usuario);
+                        lista.Add(usuario);
+                        if (this.getJsonUtils().updateJson(lista)) return "Lista actualizada con exito.";
                     }
                 }
                 else return "Usuario no encontrado.";
 
             }
 
-            return "";
+            return "a";
         }
+
 
         public string updateRegistroUsuario(string mensaje)
         {
-            if (!this.getUsuarioActual().Equals(null))
+            Usuario? toUpdate = this.getListaUsuarios().Where(x => x.getIpv4() == this.getIpv4Adress()).First();
+            if (toUpdate != null)
             {
-                Usuario toUpdate = this.getUsuarioActual();
-
                 List<Sesion>? lista_sesiones = toUpdate.getSesiones();
                 if (!lista_sesiones.Equals(null))
                 {
@@ -149,13 +166,26 @@ namespace ASPWeb_Demo2.Controllers.Managers
             return ("Lista no actualizada.");
         }
 
-        private Usuario usuarioActual;
-
-        public Usuario getUsuarioActual() => this.usuarioActual;
-
-        public void setUsuarioActual(Usuario usuarioActual)
+        private string? getIpv4Adress()
         {
-            this.usuarioActual = usuarioActual;
+            try
+            {
+                string? toReturn = null;
+
+                var host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        toReturn = ip.ToString();
+                    }
+                }
+
+                return toReturn;
+            } catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
         
         private JsonUtils getJsonUtils() => this.jsonUtils;

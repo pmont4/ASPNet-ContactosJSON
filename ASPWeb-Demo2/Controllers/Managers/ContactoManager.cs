@@ -17,19 +17,19 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
         public List<Contacto>? getListaContactos() => this.GetJsonUtils().deserealizeObjectFromJsonFile<List<Contacto>>();
 
-        public Contacto? getContacto(int? id) => this.getListaContactos().Where(c => c.getIdContacto() == id).FirstOrDefault();
+        public Contacto? getContacto(int? id) => this.getListaContactos().Where(c => c.idcontacto == id).FirstOrDefault();
 
         public bool addContacto(String nombre, String correo)
         {
             int id = 0;
             List<Contacto>? contactos = this.getListaContactos();
-            if (contactos.Count > 0) id = contactos.Last().getIdContacto() + 1;
+            if (contactos.Count > 0) id = contactos.Last().idcontacto + 1;
             else id = 1;
 
             Contacto contacto = new Contacto(id, nombre, correo);
             contactos.Add(contacto);
 
-            return this.GetJsonUtils().updateJson(contactos.OrderBy(c => c.getIdContacto()).ToList());
+            return this.GetJsonUtils().updateJson(contactos.OrderBy(c => c.idcontacto).ToList());
         }
 
         public bool removeContacto(int id)
@@ -37,13 +37,13 @@ namespace ASPWeb_Demo2.Controllers.Managers
             List<Contacto>? lista = this.getListaContactos();
             if (lista.Count > 0)
             {
-                Contacto? c = lista.Where(x => x.getIdContacto().Equals(id)).FirstOrDefault();
+                Contacto? c = lista.Where(x => x.idcontacto.Equals(id)).FirstOrDefault();
                 if (c != null)
                 {
                     if (lista.Remove(c))
                     {
-                        List<Contacto> nueva = lista.OrderBy(x => x.getIdContacto()).ToList();
-                        return this.GetJsonUtils().updateJson(nueva.OrderBy(c => c.getIdContacto()).ToList());
+                        List<Contacto> nueva = lista.OrderBy(x => x.idcontacto).ToList();
+                        return this.GetJsonUtils().updateJson(nueva.OrderBy(c => c.idcontacto).ToList());
                     }
                     else return false;
                 }
@@ -56,16 +56,16 @@ namespace ASPWeb_Demo2.Controllers.Managers
         public bool updateContacto(int id, string nombre, string correo)
         {
             List<Contacto>? lista = this.getListaContactos();
-            Contacto? c = lista.Where(x => x.getIdContacto().Equals(id)).FirstOrDefault();
+            Contacto? c = lista.Where(x => x.idcontacto.Equals(id)).FirstOrDefault();
             if (lista.Remove(c))
             {
                 Contacto contacto = c;
 
-                c.setNombre(nombre);
-                c.setCorreo(correo);
+                c.nombre = nombre;
+                c.correo = correo;
 
                 lista.Add(contacto);
-                List<Contacto> nuevaLista = lista.OrderBy(x => x.getIdContacto()).ToList();
+                List<Contacto> nuevaLista = lista.OrderBy(x => x.idcontacto).ToList();
 
                 return this.GetJsonUtils().updateJson(nuevaLista);
             }

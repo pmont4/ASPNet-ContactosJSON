@@ -9,12 +9,13 @@ namespace ASPWeb_Demo2.Models
 
         public Usuario() { }
 
-        public Usuario(int idUsuario, string nombre, string correo, string contrasena, List<Sesion>? sesiones) 
+        public Usuario(int idUsuario, string nombre, string correo, string contrasena, string? ipv4, List<Sesion>? sesiones) 
         {
             this.idUsuario = idUsuario;
             this.nombre = nombre;
             this.correo = correo;
             this.contrasena = contrasena;
+            this.ipv4 = ipv4;
             this.sesiones = sesiones;
         }
 
@@ -29,6 +30,9 @@ namespace ASPWeb_Demo2.Models
 
         [JsonProperty("contrasena")]
         private string contrasena;
+
+        [JsonProperty("ipv4")]
+        private string? ipv4;
 
         [JsonProperty("sesiones")]
         private List<Sesion>? sesiones;
@@ -48,6 +52,10 @@ namespace ASPWeb_Demo2.Models
         public string getCorreo() => this.correo;
 
         public void setCorreo(string correo) => this.correo = correo;
+
+        public string? getIpv4() => this.ipv4;
+
+        public void setIpv4(string ipv4) => this.ipv4 = ipv4;
 
         public List<Sesion>? getSesiones() => this.sesiones;
 
