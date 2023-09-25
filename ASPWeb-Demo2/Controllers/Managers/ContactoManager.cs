@@ -15,11 +15,6 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
         private string linkToJsonFile = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\contactos.json";
 
-        public List<Contacto>? list 
-        { 
-            get => this.GetJsonUtils().deserealizeObjectFromJsonFile<List<Contacto>>();
-        }
-
         public List<Contacto>? getListaContactos() => this.GetJsonUtils().deserealizeObjectFromJsonFile<List<Contacto>>();
 
         public Contacto? getContacto(int? id) => this.getListaContactos().Where(c => c.idcontacto == id).FirstOrDefault();
