@@ -129,13 +129,12 @@ namespace ASPWeb_Demo2.Controllers.Managers
                                 {
                                     Registro registro = new Registro();
 
-                                    int id_registro;
+                                    int id_registro = 1;
                                     if (lista_registros.Count > 0) id_registro = lista_registros.Last().getIdRegistro() + 1;
-                                    else id_registro = 1;
 
                                     registro.setIdRegistro(id_registro);
-                                    registro.setFecha(DateTime.Now.ToString("dd/MM/yyyy-HH:mm"));
-                                    registro.setTexto(id_registro + " - " + mensaje.Trim());
+                                    registro.setFecha(DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+                                    registro.setTexto(id_registro + " - " + mensaje);
 
                                     lista_registros.Add(registro);
                                     sesionToUpdate.setRegistros(lista_registros);

@@ -4,7 +4,7 @@
     "nombre": "pulito",
     "correo": "pulito@gmail.com",
     "contrasena": "Monterroso2005",
-    "ipv4": "172.20.12.171",
+    "ipv4": "172.20.12.228",
     "sesiones": [
       {
         "idSesion": 1,
@@ -20,13 +20,32 @@
         "idSesion": 3,
         "fecha": "22/09/2023",
         "registros": [
-          {},
-          {},
-          {},
-          {},
-          {},
-          {}
+          {
+            "idRegistro": 1,
+            "texto": "1 - ha eliminado al usuario 12",
+            "fecha": "2023-09-22 11:19"
+          },
+          {
+            "idRegistro": 2,
+            "texto": "2 - ha creado al usuario pepe",
+            "fecha": "2023-09-22 11:19"
+          },
+          {
+            "idRegistro": 3,
+            "texto": "3 - ha creado al usuario belcast",
+            "fecha": "2023-09-22 11:21"
+          },
+          {
+            "idRegistro": 4,
+            "texto": "4 - ha editado al usuario tumaridobelcast",
+            "fecha": "2023-09-22 11:25"
+          }
         ]
+      },
+      {
+        "idSesion": 4,
+        "fecha": "25/09/2023",
+        "registros": []
       }
     ]
   }

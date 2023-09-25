@@ -1,6 +1,8 @@
-﻿using ASPWeb_Demo2.Controllers.Managers;
+﻿using ASPWeb_Demo2.Controllers.Cache;
+using ASPWeb_Demo2.Controllers.Managers;
 using ASPWeb_Demo2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers
 {
@@ -8,11 +10,24 @@ namespace ASPWeb_Demo2.Controllers
     public class ContactoController : Controller
     {
 
+        private SesionCache sesionCache;
+
         private volatile ContactoManager contactoManager;
         private volatile UsuarioManager usuarioManager;
 
+        private IMemoryCache memoryCache;
+
+        public ContactoController(IMemoryCache memoryCache)
+        {
+            this.memoryCache = memoryCache;
+        }
+
         [HttpGet]
-        public IActionResult Inicio() => View(this.GetContactoManager().getListaContactos());
+        public IActionResult Inicio()
+        {
+            Console.WriteLine(this.GetSesionCache().GetFromCache().getNombre());
+            return View(this.GetContactoManager().getListaContactos());
+        }
 
         /*
          * 
@@ -148,6 +163,16 @@ namespace ASPWeb_Demo2.Controllers
                 usuarioManager = new UsuarioManager();
             }
             return usuarioManager;
+        }
+
+        public SesionCache GetSesionCache()
+        {
+            if (sesionCache == null)
+            {
+                sesionCache = new SesionCache(this.memoryCache);
+                return sesionCache;
+            }
+            return sesionCache;
         }
     }
 

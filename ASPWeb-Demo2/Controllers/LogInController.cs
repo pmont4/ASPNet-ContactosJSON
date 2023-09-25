@@ -1,11 +1,22 @@
-﻿using ASPWeb_Demo2.Controllers.Managers;
+﻿using ASPWeb_Demo2.Controllers.Cache;
+using ASPWeb_Demo2.Controllers.Managers;
 using ASPWeb_Demo2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers
-{
+{         
     public class LogInController : Controller
     {
+
+        private SesionCache sessionCache;
+        private IMemoryCache memoryCache;
+
+        public LogInController(IMemoryCache memoryCache)
+        {
+            this.memoryCache = memoryCache;
+        }
+
 
         /*
          * Unicamente muestra la vista LogIn
@@ -37,6 +48,12 @@ namespace ASPWeb_Demo2.Controllers
                 if (usuarioManager.verificar(nombre, contrasena))
                 {
                     Console.WriteLine(usuarioManager.crearSesion(usuario));
+                    if (this.GetSesionCache().GetFromCache() == null)
+                    {
+                        this.GetSesionCache().SetFromCache(usuario);
+
+                        Console.WriteLine(this.GetSesionCache().GetFromCache().getNombre());
+                    }
                     return RedirectToAction("Inicio","Contacto");
                 } else return View();
             } else return View();
@@ -63,6 +80,16 @@ namespace ASPWeb_Demo2.Controllers
         }
 
         private bool verifyContrasena(string input) => input.Length >= 8 && input.Any(c => char.IsUpper(c)) && input.Any(c => char.IsDigit(c));
+
+        public SesionCache GetSesionCache()
+        {
+            if (sessionCache == null)
+            {
+                sessionCache = new SesionCache(this.memoryCache);
+                return sessionCache;
+            }
+            return sessionCache;
+        }
 
     }
 }

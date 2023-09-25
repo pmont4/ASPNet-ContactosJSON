@@ -1,12 +1,20 @@
-﻿namespace ASPWeb_Demo2.Models
+﻿using Newtonsoft.Json;
+
+namespace ASPWeb_Demo2.Models
 {
 
     [Serializable]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class Registro
     {
 
+        [JsonProperty("idRegistro")]
         private int idRegistro;
+
+        [JsonProperty("texto")]
         private string texto;
+
+        [JsonProperty("fecha")]
         private string fecha;
 
         public Registro() { }

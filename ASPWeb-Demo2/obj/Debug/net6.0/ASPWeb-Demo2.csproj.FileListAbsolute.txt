@@ -36,3 +36,9 @@ C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\libman.js
 C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\obj\Debug\net6.0\ASPWeb_Demo2.Properties.Resources.resources
 C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\obj\Debug\net6.0\ASPWeb-Demo2.csproj.GenerateResource.cache
 C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\json\usuarios.json
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
+C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll

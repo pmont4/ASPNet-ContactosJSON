@@ -50,23 +50,8 @@
     "correo": "tomas@gmail.com"
   },
   {
-    "idContacto": 12,
-    "nombre": "pepe",
-    "correo": "pepe@gmail.com"
-  },
-  {
     "idContacto": 13,
-    "nombre": "pepe",
-    "correo": "pepe@gmail.com"
-  },
-  {
-    "idContacto": 14,
-    "nombre": "pepe",
-    "correo": "pepe@gmail.com"
-  },
-  {
-    "idContacto": 15,
-    "nombre": "pepe",
-    "correo": "pepe@gmail.com"
+    "nombre": "tumaridobelcast",
+    "correo": "belcast@gmail.com"
   }
 ]
