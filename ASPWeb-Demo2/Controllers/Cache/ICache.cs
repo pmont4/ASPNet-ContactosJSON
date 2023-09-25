@@ -5,7 +5,7 @@ namespace ASPWeb_Demo2.Controllers.Cache
     public abstract class ICache<T> where T : class
     {
 
-        private IMemoryCache memoryCache;
+        public IMemoryCache memoryCache;
 
         public string key { get; }
 
@@ -20,10 +20,10 @@ namespace ASPWeb_Demo2.Controllers.Cache
 
         public void RemoveFromCache()
         {
-            this.GetMemoryCache.Remove(this.key);
+            this.GetMemoryCache().Remove(this.key);
         }
 
-        private IMemoryCache GetMemoryCache => this.memoryCache;
+        public IMemoryCache GetMemoryCache() => this.memoryCache;
 
     }
 }
