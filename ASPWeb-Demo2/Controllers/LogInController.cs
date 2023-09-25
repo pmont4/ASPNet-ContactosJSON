@@ -12,11 +12,12 @@ namespace ASPWeb_Demo2.Controllers
         private SesionCache sessionCache;
         private IMemoryCache memoryCache;
 
+        private UsuarioManager usuarioManager;
+
         public LogInController(IMemoryCache memoryCache)
         {
             this.memoryCache = memoryCache;
         }
-
 
         /*
          * Unicamente muestra la vista LogIn
@@ -40,19 +41,15 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Login(string nombre, string contrasena, bool check)
         {
-            UsuarioManager usuarioManager = new UsuarioManager();
-
-            Usuario usuario = usuarioManager.getUsuario(nombre);
+            Usuario? usuario = this.getUsuarioManager().getUsuario(nombre);
             if (usuario != null && !(string.IsNullOrEmpty(nombre) && string.IsNullOrEmpty(contrasena))) 
             {
-                if (usuarioManager.verificar(nombre, contrasena))
+                if (this.getUsuarioManager().verificar(nombre, contrasena))
                 {
-                    Console.WriteLine(usuarioManager.crearSesion(usuario));
+                    this.getUsuarioManager().crearSesion(usuario);
                     if (this.GetSesionCache().GetFromCache() == null)
                     {
                         this.GetSesionCache().SetFromCache(usuario);
-
-                        Console.WriteLine(this.GetSesionCache().GetFromCache().getNombre());
                     }
                     return RedirectToAction("Inicio","Contacto");
                 } else return View();
@@ -66,12 +63,11 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Registrar(string nombre, string correo, string contrasena)
         {
-            UsuarioManager usuarioManager = new UsuarioManager();
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo) && !string.IsNullOrEmpty(contrasena))
             {
                 if (this.verifyContrasena(contrasena))
                 {
-                    if (usuarioManager.addUsuario(nombre, correo, contrasena))
+                    if (this.getUsuarioManager().addUsuario(nombre, correo, contrasena))
                     {
                         return RedirectToAction("Login", "LogIn");
                     } else return View();
@@ -89,6 +85,15 @@ namespace ASPWeb_Demo2.Controllers
                 return sessionCache;
             }
             return sessionCache;
+        }
+
+        private UsuarioManager getUsuarioManager()
+        {
+            if (this.usuarioManager == null)
+            {
+                usuarioManager = new UsuarioManager(this.memoryCache);
+            }
+            return usuarioManager;
         }
 
     }

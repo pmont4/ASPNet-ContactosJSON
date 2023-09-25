@@ -45,7 +45,33 @@
       {
         "idSesion": 4,
         "fecha": "25/09/2023",
-        "registros": []
+        "registros": [
+          {
+            "idRegistro": 1,
+            "texto": "1 - ha creado al usuario pepe",
+            "fecha": "2023-09-25 15:34"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "idUsuario": 3,
+    "nombre": "giyu",
+    "correo": "giyu@gmail.com",
+    "contrasena": "Roco2003",
+    "ipv4": "172.20.12.228",
+    "sesiones": [
+      {
+        "idSesion": 1,
+        "fecha": "25/09/2023",
+        "registros": [
+          {
+            "idRegistro": 1,
+            "texto": "1 - ha eliminado al usuario 14",
+            "fecha": "2023-09-25 15:37"
+          }
+        ]
       }
     ]
   }

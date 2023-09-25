@@ -6,7 +6,6 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers
 {
-
     public class ContactoController : Controller
     {
 
@@ -64,9 +63,7 @@ namespace ASPWeb_Demo2.Controllers
         public IActionResult Editar(int? id)
         {
             if (id == null) return RedirectToAction("Inicio", "Contacto");
-
             Contacto c = this.GetContactoManager().getContacto(id);
-
             return View(c);
         }
 
@@ -85,10 +82,7 @@ namespace ASPWeb_Demo2.Controllers
                 {
                     Console.WriteLine(this.getUsuarioManager().updateRegistroUsuario(this.RegistroFormato("crear", nombre)));
                     return RedirectToAction("Inicio", "Contacto");
-                } else
-                {
-                    Console.WriteLine("No se pudo");
-                }
+                } 
             } else return View();
 
             return View();
@@ -160,7 +154,7 @@ namespace ASPWeb_Demo2.Controllers
         {
             if (this.usuarioManager == null)
             {
-                usuarioManager = new UsuarioManager();
+                usuarioManager = new UsuarioManager(this.memoryCache);
             }
             return usuarioManager;
         }

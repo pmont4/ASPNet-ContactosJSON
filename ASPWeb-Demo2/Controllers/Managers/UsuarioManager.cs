@@ -2,6 +2,8 @@
 using ASPWeb_Demo2.Util;
 using System.Net.Sockets;
 using System.Net;
+using ASPWeb_Demo2.Controllers.Cache;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers.Managers
 {
@@ -11,15 +13,12 @@ namespace ASPWeb_Demo2.Controllers.Managers
         private string linkToJsonFile = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\usuarios.json";
 
         private volatile JsonUtils jsonUtils;
+        private SesionCache sesionCache;
 
-        public UsuarioManager()
+        public UsuarioManager(IMemoryCache memoryCache)
         {
             jsonUtils = new JsonUtils(linkToJsonFile);
-        }
-
-        public UsuarioManager(Usuario uActual)
-        {
-            jsonUtils = new JsonUtils(linkToJsonFile);
+            this.sesionCache = new SesionCache(memoryCache);
         }
 
         public List<Usuario>? getListaUsuarios() => this.getJsonUtils().deserealizeObjectFromJsonFile<List<Usuario>>();
@@ -111,58 +110,63 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
         public string updateRegistroUsuario(string mensaje)
         {
-            Usuario? toUpdate = this.getListaUsuarios().Where(x => x.getIpv4() == this.getIpv4Adress()).First();
-            if (toUpdate != null)
+            Usuario? cacheUser = this.GetSesionCache().GetFromCache();
+            if (cacheUser != null)
             {
-                List<Sesion>? lista_sesiones = toUpdate.getSesiones();
-                if (!lista_sesiones.Equals(null))
+                Usuario? toUpdate = this.getListaUsuarios().Where(x => x.getIdUsuario() == cacheUser.getIdUsuario()).First();
+                if (toUpdate != null)
                 {
-                    if (lista_sesiones.Count > 0)
+                    List<Sesion>? lista_sesiones = toUpdate.getSesiones();
+                    if (!lista_sesiones.Equals(null))
                     {
-                        Sesion? sesionToUpdate = lista_sesiones.Find(s => s.getFecha() == DateTime.Now.ToString("dd/MM/yyyy"));
-                        if (lista_sesiones.Remove(sesionToUpdate))
+                        if (lista_sesiones.Count > 0)
                         {
-                            if (!sesionToUpdate.Equals(null))
+                            Sesion? sesionToUpdate = lista_sesiones.Find(s => s.getFecha() == DateTime.Now.ToString("dd/MM/yyyy"));
+                            if (lista_sesiones.Remove(sesionToUpdate))
                             {
-                                List<Registro>? lista_registros = sesionToUpdate.getRegistros();
-                                if (!lista_registros.Equals(null))
+                                if (!sesionToUpdate.Equals(null))
                                 {
-                                    Registro registro = new Registro();
-
-                                    int id_registro = 1;
-                                    if (lista_registros.Count > 0) id_registro = lista_registros.Last().getIdRegistro() + 1;
-
-                                    registro.setIdRegistro(id_registro);
-                                    registro.setFecha(DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
-                                    registro.setTexto(id_registro + " - " + mensaje);
-
-                                    lista_registros.Add(registro);
-                                    sesionToUpdate.setRegistros(lista_registros);
-                                    lista_sesiones.Add(sesionToUpdate);
-
-                                    toUpdate.setSesiones(lista_sesiones.OrderBy(s => s.getIdSesion()).ToList());
-
-                                    List<Usuario>? lista_actualizada = this.getListaUsuarios();
-                                    Usuario? u = lista_actualizada.Where(u => u.getIdUsuario() == toUpdate.getIdUsuario()).First();
-                                    if (lista_actualizada.Remove(u))
+                                    List<Registro>? lista_registros = sesionToUpdate.getRegistros();
+                                    if (!lista_registros.Equals(null))
                                     {
-                                        lista_actualizada.Add(toUpdate);
+                                        Registro registro = new Registro();
 
-                                        if (this.getJsonUtils().updateJson(lista_actualizada.OrderBy(u => u.getIdUsuario()).ToList())) return ("Lista actualizada");
+                                        int id_registro = 1;
+                                        if (lista_registros.Count > 0) id_registro = lista_registros.Last().getIdRegistro() + 1;
+
+                                        registro.setIdRegistro(id_registro);
+                                        registro.setFecha(DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+                                        registro.setTexto(id_registro + " - " + mensaje);
+
+                                        lista_registros.Add(registro);
+                                        sesionToUpdate.setRegistros(lista_registros);
+                                        lista_sesiones.Add(sesionToUpdate);
+
+                                        toUpdate.setSesiones(lista_sesiones.OrderBy(s => s.getIdSesion()).ToList());
+
+                                        List<Usuario>? lista_actualizada = this.getListaUsuarios();
+                                        Usuario? u = lista_actualizada.Where(u => u.getIdUsuario() == toUpdate.getIdUsuario()).First();
+                                        if (lista_actualizada.Remove(u))
+                                        {
+                                            lista_actualizada.Add(toUpdate);
+
+                                            if (this.getJsonUtils().updateJson(lista_actualizada.OrderBy(u => u.getIdUsuario()).ToList())) return ("Lista actualizada");
+                                        }
                                     }
+                                    else return ("Lista no actualizada, se retorno nulo en la lista de registros.");
                                 }
-                                else return ("Lista no actualizada, se retorno nulo en la lista de registros.");
+                                else return ("Lista no actualizada, se retorno nulo en la lista de sesiones.");
                             }
-                            else return ("Lista no actualizada, se retorno nulo en la lista de sesiones.");
                         }
                     }
                 }
+                else
+                {
+                    return ("Lista no actualizada, el usuario actual fue nulo.");
+                }
+                return ("Lista no actualizada.");
             }
-            else
-            {
-                return ("Lista no actualizada, el usuario actual fue nulo.");
-            }
-            return ("Lista no actualizada.");
+            return ("No se pudo actualizar la lista");
         }
 
         private string? getIpv4Adress()
@@ -188,6 +192,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
         }
         
         private JsonUtils getJsonUtils() => this.jsonUtils;
+        private SesionCache GetSesionCache() => this.sesionCache;
 
     }
 }
