@@ -22,11 +22,8 @@ namespace ASPWeb_Demo2.Controllers
         }
 
         [HttpGet]
-        public IActionResult Inicio()
-        {
-            Console.WriteLine(this.GetSesionCache().GetFromCache().getNombre());
-            return View(this.GetContactoManager().getListaContactos());
-        }
+        public IActionResult Inicio() => this.GetSesionCache().GetFromCache() != null ? View(this.GetContactoManager().getListaContactos()) : RedirectToAction("Login", "LogIn");
+
 
         /*
          * 
@@ -35,7 +32,7 @@ namespace ASPWeb_Demo2.Controllers
          */
 
         [HttpGet]
-        public IActionResult Crear() => View();
+        public IActionResult Crear() => this.GetSesionCache().GetFromCache() != null ? View() : RedirectToAction("Login", "LogIn");
 
         /*
          * 
@@ -46,11 +43,15 @@ namespace ASPWeb_Demo2.Controllers
         [HttpGet]
         public IActionResult Eliminar(int? id)
         {
-            if (id != null)
+            if (this.GetSesionCache().GetFromCache() != null)
             {
-                Contacto contacto = this.GetContactoManager().getContacto(id);
-                return View(contacto);
-            } else return RedirectToAction("Inicio", "Contacto");
+                if (id != null)
+                {
+                    Contacto contacto = this.GetContactoManager().getContacto(id);
+                    return View(contacto);
+                }
+                else return RedirectToAction("Inicio", "Contacto");
+            } else return RedirectToAction("Login", "LogIn");
         }
 
         /*
@@ -61,10 +62,13 @@ namespace ASPWeb_Demo2.Controllers
 
         [HttpGet]
         public IActionResult Editar(int? id)
-        {
-            if (id == null) return RedirectToAction("Inicio", "Contacto");
-            Contacto c = this.GetContactoManager().getContacto(id);
-            return View(c);
+        { 
+            if (this.GetSesionCache().GetFromCache() != null)
+            {
+                if (id == null) return RedirectToAction("Inicio", "Contacto");
+                Contacto c = this.GetContactoManager().getContacto(id);
+                return View(c);
+            } else return RedirectToAction("Login", "LogIn");
         }
 
         /*

@@ -33,6 +33,13 @@ namespace ASPWeb_Demo2.Controllers
         [HttpGet]
         public IActionResult Registrar() => View();
 
+        [HttpGet]
+        public IActionResult Logout() 
+        {
+            this.GetSesionCache().RemoveFromCache();
+            return View();
+        } 
+
 
         /*
          * Es el metodo que lleva acabo la accion de LogIn
