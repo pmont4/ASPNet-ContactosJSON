@@ -34,7 +34,7 @@ namespace ASPWeb_Demo2.Controllers
                 }
                 else
                 {
-                    model = this.GetContactoManager().getListaContactos();
+                    model = this.GetContactoManager().GetAll();
                     this.GetContactosCache().SetFromCache(model);
                 }
                 return View(model);
@@ -65,7 +65,7 @@ namespace ASPWeb_Demo2.Controllers
             {
                 if (id != null)
                 {
-                    Contacto contacto = this.GetContactoManager().getContacto(id);
+                    Contacto? contacto = this.GetContactoManager().GetOne(id);
                     return View(contacto);
                 }
                 else return RedirectToAction("Inicio", "Contacto");
@@ -84,7 +84,7 @@ namespace ASPWeb_Demo2.Controllers
             if (this.GetSesionCache().GetFromCache() != null)
             {
                 if (id == null) return RedirectToAction("Inicio", "Contacto");
-                Contacto c = this.GetContactoManager().getContacto(id);
+                Contacto? c = this.GetContactoManager().GetOne(id);
                 return View(c);
             } else return RedirectToAction("Login", "LogIn");
         }
@@ -100,7 +100,17 @@ namespace ASPWeb_Demo2.Controllers
         {
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo))
             {
-                if (this.GetContactoManager().addContacto(nombre, correo))
+                Contacto contacto = new Contacto();
+                int id;
+
+                if (this.GetContactoManager().GetAll().Count() > 0) id = this.GetContactoManager().GetAll().Last().idcontacto + 1;
+                else id = 1;
+
+                contacto.idcontacto = id;
+                contacto.nombre = nombre;
+                contacto.correo = correo;
+
+                if (this.GetContactoManager().Add(contacto))
                 {
                     Console.WriteLine(this.getUsuarioManager().updateRegistroUsuario(this.RegistroFormato("crear", nombre)));
                     return RedirectToAction("Inicio", "Contacto");
@@ -119,12 +129,13 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Editar(int id, string nombre, string correo)
         {
-            Contacto contacto = this.GetContactoManager().getContacto(id);
+            Contacto contacto = this.GetContactoManager().GetOne(id);
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo))
             {
                 if (contacto.nombre != nombre || contacto.correo != correo)
                 {
-                    if (this.GetContactoManager().updateContacto(id, nombre, correo))
+                    Contacto toSend = new Contacto(0, nombre, correo);
+                    if (this.GetContactoManager().Update(id, toSend))
                     {
                         Console.WriteLine(this.getUsuarioManager().updateRegistroUsuario(this.RegistroFormato("editar", nombre)));
                     }
@@ -142,8 +153,7 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Eliminar(int id) 
         {
-            Contacto contacto = this.GetContactoManager().getContacto(id);
-            if (this.GetContactoManager().removeContacto(id))
+            if (this.GetContactoManager().Remove(id))
             {
                 Console.WriteLine(this.getUsuarioManager().updateRegistroUsuario(this.RegistroFormato("eliminar", id)));
             }

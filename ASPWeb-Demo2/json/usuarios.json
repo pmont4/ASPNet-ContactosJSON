@@ -66,6 +66,21 @@
             "idRegistro": 1,
             "texto": "1 - ha eliminado al usuario 13",
             "fecha": "2023-09-28 12:08"
+          },
+          {
+            "idRegistro": 2,
+            "texto": "2 - ha eliminado al usuario 11",
+            "fecha": "2023-09-28 16:01"
+          },
+          {
+            "idRegistro": 3,
+            "texto": "3 - ha creado al usuario Belcast",
+            "fecha": "2023-09-28 16:01"
+          },
+          {
+            "idRegistro": 4,
+            "texto": "4 - ha editado al usuario Belcast",
+            "fecha": "2023-09-28 16:01"
           }
         ]
       }

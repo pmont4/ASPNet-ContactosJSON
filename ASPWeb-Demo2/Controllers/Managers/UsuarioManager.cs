@@ -7,43 +7,74 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers.Managers
 {
-    public class UsuarioManager
+    public class UsuarioManager : IManager<Usuario>
     {
 
-        private string linkToJsonFile = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\usuarios.json";
-
         private volatile JsonUtils jsonUtils;
-        private SesionCache sesionCache;
+        private volatile SesionCache sesionCache;
 
-        public UsuarioManager(IMemoryCache memoryCache)
+        public UsuarioManager(IMemoryCache memoryCache) 
         {
-            jsonUtils = new JsonUtils(linkToJsonFile);
             this.sesionCache = new SesionCache(memoryCache);
         }
 
-        public List<Usuario>? getListaUsuarios() => this.getJsonUtils().deserealizeObjectFromJsonFile<List<Usuario>>();
+        public List<Usuario>? GetAll() => this.getJsonUtils().deserealizeObjectFromJsonFile<List<Usuario>>(JsonUtils.USER_FILE_LINK);
 
-        public Usuario? getUsuario(string? nombre) => this.getListaUsuarios().Where(u => u.getNombre() == nombre).FirstOrDefault();
-
-        public bool addUsuario(string nombre, string correo, string contrasena)
+        public Usuario? GetOne(object identifier)
         {
-            int id = 0;
-            if (this.getListaUsuarios().Count() > 0) id = this.getListaUsuarios().Last().getIdUsuario() + 1;
-            else id = 1;
-
-            Usuario usuario = new Usuario(id, nombre, correo, contrasena, this.getIpv4Adress(), null);
-
-            List<Usuario> lista = this.getListaUsuarios();
-            lista.Add(usuario);
-
-            return this.getJsonUtils().updateJson(lista.OrderBy(x => x.getIdUsuario()).ToList());
+            try
+            {
+                string name = Convert.ToString(identifier);
+                return this.GetAll().Where(u => u.getNombre() == name).FirstOrDefault();
+            } catch (InvalidCastException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
         }
 
-        public bool verificar(string nombre, string contrasena) => this.getListaUsuarios().Any(u => u.getNombre() == nombre && u.getContrasena() == contrasena);
+        public bool Add(Usuario value)
+        {
+            List<Usuario>? list = this.GetAll();
+            list.Add(value);
+            return this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, list.OrderBy(x => x.getIdUsuario()).ToList());
+        }
+
+        public bool Remove(object identifier)
+        {
+            try
+            {
+                int id = Convert.ToInt32(identifier);
+                List<Usuario> list = this.GetAll();
+
+                Usuario? toRemove = list.Where(u => u.getIdUsuario() == id).FirstOrDefault();
+                if (toRemove != null)
+                {
+                    if (list.Remove(toRemove))
+                    {
+                        return this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, list.OrderBy(x => x.getIdUsuario()).ToList());
+                    }
+                    else return false;
+                }
+                else return false;
+
+            } catch (InvalidCastException ex)
+            {
+                Console.WriteLine(ex.Message);  
+            }
+            return false;
+        }
+
+        public bool Update(object identifier, Usuario NewValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool verificar(string nombre, string contrasena) => this.GetAll().Any(u => u.getNombre() == nombre && u.getContrasena() == contrasena);
 
         public string crearSesion(Usuario usuario)
         {
-            List<Usuario>? lista = this.getListaUsuarios();
+            List<Usuario>? lista = this.GetAll();
 
             if (lista.Count > 0)
             {
@@ -58,7 +89,8 @@ namespace ASPWeb_Demo2.Controllers.Managers
                         if (current_ipv4 == null)
                         {
                             usuario.setIpv4(this.getIpv4Adress());
-                        } else if (current_ipv4 != this.getIpv4Adress())
+                        }
+                        else if (current_ipv4 != this.getIpv4Adress())
                         {
                             usuario.setIpv4(this.getIpv4Adress());
                         }
@@ -78,7 +110,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
                                     usuario.setSesiones(lista_sesiones_old.OrderBy(x => x.getIdSesion()).ToList());
 
                                     lista.Add(usuario);
-                                    if (this.getJsonUtils().updateJson(lista)) return "Lista actualizada con exito.";
+                                    if (this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, lista)) return "Lista actualizada con exito.";
                                 }
                             }
                         }
@@ -93,11 +125,11 @@ namespace ASPWeb_Demo2.Controllers.Managers
                             usuario.setSesiones(nueva_lista.OrderBy(x => x.getIdSesion()).ToList());
 
                             lista.Add(usuario);
-                            if (this.getJsonUtils().updateJson(lista)) return "Lista actualizada con exito.";
+                            if (this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, lista)) return "Lista actualizada con exito.";
                         }
 
                         lista.Add(usuario);
-                        if (this.getJsonUtils().updateJson(lista)) return "Lista actualizada con exito.";
+                        if (this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, lista)) return "Lista actualizada con exito.";
                     }
                 }
                 else return "Usuario no encontrado.";
@@ -113,7 +145,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
             Usuario? cacheUser = this.GetSesionCache().GetFromCache();
             if (cacheUser != null)
             {
-                Usuario? toUpdate = this.getListaUsuarios().Where(x => x.getIdUsuario() == cacheUser.getIdUsuario()).First();
+                Usuario? toUpdate = this.GetAll().Where(x => x.getIdUsuario() == cacheUser.getIdUsuario()).First();
                 if (toUpdate != null)
                 {
                     List<Sesion>? lista_sesiones = toUpdate.getSesiones();
@@ -144,13 +176,13 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
                                         toUpdate.setSesiones(lista_sesiones.OrderBy(s => s.getIdSesion()).ToList());
 
-                                        List<Usuario>? lista_actualizada = this.getListaUsuarios();
+                                        List<Usuario>? lista_actualizada = this.GetAll();
                                         Usuario? u = lista_actualizada.Where(u => u.getIdUsuario() == toUpdate.getIdUsuario()).First();
                                         if (lista_actualizada.Remove(u))
                                         {
                                             lista_actualizada.Add(toUpdate);
 
-                                            if (this.getJsonUtils().updateJson(lista_actualizada.OrderBy(u => u.getIdUsuario()).ToList())) return ("Lista actualizada");
+                                            if (this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, lista_actualizada.OrderBy(u => u.getIdUsuario()).ToList())) return ("Lista actualizada");
                                         }
                                     }
                                     else return ("Lista no actualizada, se retorno nulo en la lista de registros.");
@@ -185,13 +217,22 @@ namespace ASPWeb_Demo2.Controllers.Managers
                 }
 
                 return toReturn;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return ex.Message;
             }
         }
-        
-        private JsonUtils getJsonUtils() => this.jsonUtils;
+
+        private JsonUtils getJsonUtils()
+        {
+            if (this.jsonUtils == null)
+            {
+                this.jsonUtils = new JsonUtils();
+            }
+            return jsonUtils;
+        }
+
         private SesionCache GetSesionCache() => this.sesionCache;
 
     }

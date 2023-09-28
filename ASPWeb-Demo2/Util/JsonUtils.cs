@@ -1,5 +1,4 @@
-﻿using ASPWeb_Demo2.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Net;
 
 namespace ASPWeb_Demo2.Util
@@ -7,25 +6,19 @@ namespace ASPWeb_Demo2.Util
     public class JsonUtils
     {
 
-        public JsonUtils(string jsonfile_url) 
-        {
-            this.jsonfile_url = jsonfile_url;
-        }
+        public static readonly string USER_FILE_LINK = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\usuarios.json";
+        public static readonly string CONTACT_FILE_LINK = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\contactos.json";
 
-        private string jsonfile_url;
+        public JsonUtils() {}
 
-        public string getJsonFile_Url() => this.jsonfile_url;
-
-        public void setJsonFile_Url(string jsonfile_url) => this.jsonfile_url = jsonfile_url;
-
-        public bool updateJson<T>(T toWrite)
+        public bool updateJson<T>(string url, T toWrite)
         {
             if (toWrite != null)
             {
-                File.WriteAllText(this.getJsonFile_Url(), string.Empty);
+                File.WriteAllText(url, string.Empty);
 
                 string json = this.serializeObjectToJson(toWrite);
-                using (StreamWriter writer = File.AppendText(this.getJsonFile_Url()))
+                using (StreamWriter writer = File.AppendText(url))
                 {
                     writer.Write(json);
                     return true;
@@ -34,9 +27,9 @@ namespace ASPWeb_Demo2.Util
             return false;
         }
 
-        public T deserealizeObjectFromJsonFile<T>()
+        public T deserealizeObjectFromJsonFile<T>(string url)
         {
-            WebRequest request = WebRequest.Create(this.getJsonFile_Url());
+            WebRequest request = WebRequest.Create(url);
             WebResponse response = request.GetResponse();
 
             using (Stream data = response.GetResponseStream())

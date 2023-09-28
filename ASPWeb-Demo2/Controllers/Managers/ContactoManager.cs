@@ -5,7 +5,8 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers.Managers
 {
-    public class ContactoManager
+
+    public class ContactoManager : IManager<Contacto>
     {
 
         private volatile JsonUtils jsonUtils;
@@ -13,76 +14,100 @@ namespace ASPWeb_Demo2.Controllers.Managers
 
         public ContactoManager(IMemoryCache memoryCache)
         {
-            this.jsonUtils = new JsonUtils(linkToJsonFile);
             this.contactosCache = new ContactosCache(memoryCache);
         }
 
-        private string linkToJsonFile = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\contactos.json";
+        public List<Contacto>? GetAll() => this.GetJsonUtils().deserealizeObjectFromJsonFile<List<Contacto>>(JsonUtils.CONTACT_FILE_LINK);
 
-        public List<Contacto>? getListaContactos() => this.GetJsonUtils().deserealizeObjectFromJsonFile<List<Contacto>>();
-
-        public Contacto? getContacto(int? id) => this.getListaContactos().Where(c => c.idcontacto == id).FirstOrDefault();
-
-        public bool addContacto(String nombre, String correo)
+        public Contacto? GetOne(object identifier)
         {
-            int id = 0;
-            List<Contacto>? contactos = this.getListaContactos();
-            if (contactos.Count > 0) id = contactos.Last().idcontacto + 1;
-            else id = 1;
-
-            Contacto contacto = new Contacto(id, nombre, correo);
-            contactos.Add(contacto);
-
-            this.getContactosCache().RemoveFromCache();
-            return this.GetJsonUtils().updateJson(contactos.OrderBy(c => c.idcontacto).ToList());
+            try
+            {
+                int id = Convert.ToInt32(identifier);
+                return this.GetAll().Where(c => c.idcontacto == id).FirstOrDefault();
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
         }
 
-        public bool removeContacto(int id)
+        public bool Add(Contacto value)
         {
-            List<Contacto>? lista = this.getListaContactos();
-            if (lista.Count > 0)
+            List<Contacto>? list = this.GetAll();
+            list.Add(value);
+
+            this.getContactosCache().RemoveFromCache();
+            return this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
+        }
+
+        public bool Remove(object identifier)
+        {
+            try
             {
-                Contacto? c = lista.Where(x => x.idcontacto.Equals(id)).FirstOrDefault();
-                if (c != null)
+                int id = Convert.ToInt32(identifier);
+                List<Contacto> list = this.GetAll();
+
+                Contacto? toRemove = list.Where(c => c.idcontacto == id).FirstOrDefault();
+                if (toRemove != null)
                 {
-                    if (lista.Remove(c))
+                    if (list.Remove(toRemove))
                     {
-                        List<Contacto> nueva = lista.OrderBy(x => x.idcontacto).ToList();
-
                         this.getContactosCache().RemoveFromCache();
+                        return this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
+                    }
+                    else return false;
+                }
+                else return false;
 
-                        return this.GetJsonUtils().updateJson(nueva.OrderBy(c => c.idcontacto).ToList());
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return false;
+        }
+
+        public bool Update(object identifier, Contacto NewValue)
+        {
+            try
+            {
+                int id = Convert.ToInt32(identifier);
+                List<Contacto> list = this.GetAll();
+
+                Contacto? toUpdate = list.Where(c => c.idcontacto == id).FirstOrDefault();
+                if (toUpdate != null)
+                {
+                    Contacto Replace = NewValue;
+                    Replace.idcontacto = toUpdate.idcontacto;
+
+                    if (list.Remove(toUpdate))
+                    {
+                        list.Add(Replace);
+                        this.getContactosCache().RemoveFromCache();
+                        return this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
                     }
                     else return false;
                 }
                 else return false;
             }
-            else return false;
-
-        }
-
-        public bool updateContacto(int id, string nombre, string correo)
-        {
-            List<Contacto>? lista = this.getListaContactos();
-            Contacto? c = lista.Where(x => x.idcontacto.Equals(id)).FirstOrDefault();
-            if (lista.Remove(c))
+            catch (InvalidCastException ex)
             {
-                Contacto contacto = c;
-
-                c.nombre = nombre;
-                c.correo = correo;
-
-                lista.Add(contacto);
-                List<Contacto> nuevaLista = lista.OrderBy(x => x.idcontacto).ToList();
-
-                this.getContactosCache().RemoveFromCache();
-                return this.GetJsonUtils().updateJson(nuevaLista);
+                Console.WriteLine(ex.Message);
             }
             return false;
-
         }
 
-        private JsonUtils GetJsonUtils() => this.jsonUtils;
+        private JsonUtils GetJsonUtils()
+        {
+            if (this.jsonUtils == null)
+            {
+                this.jsonUtils = new JsonUtils();
+            }
+            return this.jsonUtils;
+        }
+
         private ContactosCache getContactosCache() => this.contactosCache;
 
     }

@@ -3,6 +3,8 @@ using ASPWeb_Demo2.Controllers.Managers;
 using ASPWeb_Demo2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using System.Net.Sockets;
+using System.Net;
 
 namespace ASPWeb_Demo2.Controllers
 {         
@@ -48,7 +50,7 @@ namespace ASPWeb_Demo2.Controllers
         [HttpPost]
         public IActionResult Login(string nombre, string contrasena, bool check)
         {
-            Usuario? usuario = this.getUsuarioManager().getUsuario(nombre);
+            Usuario? usuario = this.getUsuarioManager().GetOne(nombre);
             if (usuario != null && !(string.IsNullOrEmpty(nombre) && string.IsNullOrEmpty(contrasena))) 
             {
                 if (this.getUsuarioManager().verificar(nombre, contrasena))
@@ -74,7 +76,19 @@ namespace ASPWeb_Demo2.Controllers
             {
                 if (this.verifyContrasena(contrasena))
                 {
-                    if (this.getUsuarioManager().addUsuario(nombre, correo, contrasena))
+                    Usuario usuario = new Usuario();
+                    int id;
+
+                    if (this.getUsuarioManager().GetAll().Count() > 0) id = this.getUsuarioManager().GetAll().Last().getIdUsuario() + 1;
+                    else id = 1;
+
+                    usuario.setIdUsuario(id);
+                    usuario.setNombre(nombre);
+                    usuario.setContrasena(contrasena);
+                    usuario.setCorreo(correo);
+                    usuario.setIpv4(this.getIpv4Adress());
+
+                    if (this.getUsuarioManager().Add(usuario))
                     {
                         return RedirectToAction("Login", "LogIn");
                     } else return View();
@@ -101,6 +115,29 @@ namespace ASPWeb_Demo2.Controllers
                 usuarioManager = new UsuarioManager(this.memoryCache);
             }
             return usuarioManager;
+        }
+
+        private string? getIpv4Adress()
+        {
+            try
+            {
+                string? toReturn = null;
+
+                var host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        toReturn = ip.ToString();
+                    }
+                }
+
+                return toReturn;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
     }
