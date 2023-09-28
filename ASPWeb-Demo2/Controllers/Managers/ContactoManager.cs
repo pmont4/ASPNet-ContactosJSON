@@ -1,5 +1,7 @@
-﻿using ASPWeb_Demo2.Models;
+﻿using ASPWeb_Demo2.Controllers.Cache;
+using ASPWeb_Demo2.Models;
 using ASPWeb_Demo2.Util;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers.Managers
 {
@@ -7,10 +9,12 @@ namespace ASPWeb_Demo2.Controllers.Managers
     {
 
         private volatile JsonUtils jsonUtils;
+        private volatile ContactosCache contactosCache;
 
-        public ContactoManager()
+        public ContactoManager(IMemoryCache memoryCache)
         {
             this.jsonUtils = new JsonUtils(linkToJsonFile);
+            this.contactosCache = new ContactosCache(memoryCache);
         }
 
         private string linkToJsonFile = @"C:\Users\EJRKC\source\repos\ASPWeb-Demo2\ASPWeb-Demo2\json\contactos.json";
@@ -29,6 +33,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
             Contacto contacto = new Contacto(id, nombre, correo);
             contactos.Add(contacto);
 
+            this.getContactosCache().RemoveFromCache();
             return this.GetJsonUtils().updateJson(contactos.OrderBy(c => c.idcontacto).ToList());
         }
 
@@ -43,6 +48,9 @@ namespace ASPWeb_Demo2.Controllers.Managers
                     if (lista.Remove(c))
                     {
                         List<Contacto> nueva = lista.OrderBy(x => x.idcontacto).ToList();
+
+                        this.getContactosCache().RemoveFromCache();
+
                         return this.GetJsonUtils().updateJson(nueva.OrderBy(c => c.idcontacto).ToList());
                     }
                     else return false;
@@ -67,13 +75,15 @@ namespace ASPWeb_Demo2.Controllers.Managers
                 lista.Add(contacto);
                 List<Contacto> nuevaLista = lista.OrderBy(x => x.idcontacto).ToList();
 
+                this.getContactosCache().RemoveFromCache();
                 return this.GetJsonUtils().updateJson(nuevaLista);
             }
             return false;
 
         }
 
-        private JsonUtils GetJsonUtils() => this.jsonUtils; 
+        private JsonUtils GetJsonUtils() => this.jsonUtils;
+        private ContactosCache getContactosCache() => this.contactosCache;
 
     }
 

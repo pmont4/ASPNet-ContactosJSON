@@ -10,6 +10,7 @@ namespace ASPWeb_Demo2.Controllers
     {
 
         private SesionCache sesionCache;
+        private ContactosCache contactosCache;
 
         private volatile ContactoManager contactoManager;
         private volatile UsuarioManager usuarioManager;
@@ -22,7 +23,24 @@ namespace ASPWeb_Demo2.Controllers
         }
 
         [HttpGet]
-        public IActionResult Inicio() => this.GetSesionCache().GetFromCache() != null ? View(this.GetContactoManager().getListaContactos()) : RedirectToAction("Login", "LogIn");
+        public IActionResult Inicio()
+        {
+            if (this.GetSesionCache().GetFromCache() != null)
+            {
+                List<Contacto>? model = null;
+                if (!(this.GetContactosCache().GetFromCache() is null))
+                {
+                    model = this.GetContactosCache().GetFromCache();
+                }
+                else
+                {
+                    model = this.GetContactoManager().getListaContactos();
+                    this.GetContactosCache().SetFromCache(model);
+                }
+                return View(model);
+            }
+            else return RedirectToAction("Login", "LogIn");
+        }
 
 
         /*
@@ -150,10 +168,11 @@ namespace ASPWeb_Demo2.Controllers
         {
             if (this.contactoManager == null)
             {
-                contactoManager = new ContactoManager();
+                contactoManager = new ContactoManager(this.memoryCache);
             }
             return contactoManager;
         }
+
         private UsuarioManager getUsuarioManager()
         {
             if (this.usuarioManager == null)
@@ -163,7 +182,7 @@ namespace ASPWeb_Demo2.Controllers
             return usuarioManager;
         }
 
-        public SesionCache GetSesionCache()
+        private SesionCache GetSesionCache()
         {
             if (sesionCache == null)
             {
@@ -172,6 +191,17 @@ namespace ASPWeb_Demo2.Controllers
             }
             return sesionCache;
         }
+
+        private ContactosCache GetContactosCache()
+        {
+            if (contactosCache == null)
+            {
+                contactosCache = new ContactosCache(this.memoryCache);
+                return contactosCache;
+            }
+            return contactosCache;
+        }
+
     }
 
 }

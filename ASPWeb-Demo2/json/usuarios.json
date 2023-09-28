@@ -1,30 +1,10 @@
 [
   {
-    "idUsuario": 3,
-    "nombre": "giyu",
-    "correo": "giyu@gmail.com",
-    "contrasena": "Roco2003",
-    "ipv4": "172.20.12.228",
-    "sesiones": [
-      {
-        "idSesion": 1,
-        "fecha": "25/09/2023",
-        "registros": [
-          {
-            "idRegistro": 1,
-            "texto": "1 - ha eliminado al usuario 14",
-            "fecha": "2023-09-25 15:37"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "idUsuario": 2,
     "nombre": "pulito",
     "correo": "pulito@gmail.com",
     "contrasena": "Monterroso2005",
-    "ipv4": "172.20.12.228",
+    "ipv4": "172.20.12.141",
     "sesiones": [
       {
         "idSesion": 1,
@@ -77,6 +57,37 @@
         "idSesion": 5,
         "fecha": "27/09/2023",
         "registros": []
+      },
+      {
+        "idSesion": 6,
+        "fecha": "28/09/2023",
+        "registros": [
+          {
+            "idRegistro": 1,
+            "texto": "1 - ha eliminado al usuario 13",
+            "fecha": "2023-09-28 12:08"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "idUsuario": 3,
+    "nombre": "giyu",
+    "correo": "giyu@gmail.com",
+    "contrasena": "Roco2003",
+    "ipv4": "172.20.12.228",
+    "sesiones": [
+      {
+        "idSesion": 1,
+        "fecha": "25/09/2023",
+        "registros": [
+          {
+            "idRegistro": 1,
+            "texto": "1 - ha eliminado al usuario 14",
+            "fecha": "2023-09-25 15:37"
+          }
+        ]
       }
     ]
   }
