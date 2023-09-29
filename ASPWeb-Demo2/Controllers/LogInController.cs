@@ -7,18 +7,17 @@ using System.Net.Sockets;
 using System.Net;
 
 namespace ASPWeb_Demo2.Controllers
-{         
+{
     public class LogInController : Controller
     {
 
-        private SesionCache sessionCache;
-        private IMemoryCache memoryCache;
-
-        private UsuarioManager usuarioManager;
+        private readonly SesionCache sessionCache;
+        private readonly UsuarioManager usuarioManager;
 
         public LogInController(IMemoryCache memoryCache)
         {
-            this.memoryCache = memoryCache;
+            this.sessionCache = new SesionCache(memoryCache);
+            this.usuarioManager = new UsuarioManager(memoryCache);
         }
 
         /*
@@ -36,12 +35,11 @@ namespace ASPWeb_Demo2.Controllers
         public IActionResult Registrar() => View();
 
         [HttpGet]
-        public IActionResult Logout() 
+        public IActionResult Logout()
         {
             this.GetSesionCache().RemoveFromCache();
             return View();
-        } 
-
+        }
 
         /*
          * Es el metodo que lleva acabo la accion de LogIn
@@ -51,7 +49,7 @@ namespace ASPWeb_Demo2.Controllers
         public IActionResult Login(string nombre, string contrasena, bool check)
         {
             Usuario? usuario = this.getUsuarioManager().GetOne(nombre);
-            if (usuario != null && !(string.IsNullOrEmpty(nombre) && string.IsNullOrEmpty(contrasena))) 
+            if (usuario != null && !(string.IsNullOrEmpty(nombre) && string.IsNullOrEmpty(contrasena)))
             {
                 if (this.getUsuarioManager().verificar(nombre, contrasena))
                 {
@@ -60,9 +58,11 @@ namespace ASPWeb_Demo2.Controllers
                     {
                         this.GetSesionCache().SetFromCache(usuario);
                     }
-                    return RedirectToAction("Inicio","Contacto");
-                } else return View();
-            } else return View();
+                    return RedirectToAction("Inicio", "Contacto");
+                }
+                else return View();
+            }
+            else return View();
         }
 
         /*
@@ -70,17 +70,15 @@ namespace ASPWeb_Demo2.Controllers
          */
 
         [HttpPost]
-        public IActionResult Registrar(string nombre, string correo, string contrasena)
+        public async Task<IActionResult> Registrar(string nombre, string correo, string contrasena)
         {
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo) && !string.IsNullOrEmpty(contrasena))
             {
                 if (this.verifyContrasena(contrasena))
                 {
                     Usuario usuario = new Usuario();
-                    int id;
 
-                    if (this.getUsuarioManager().GetAll().Count() > 0) id = this.getUsuarioManager().GetAll().Last().getIdUsuario() + 1;
-                    else id = 1;
+                    int id = await this.generateNumber();
 
                     usuario.setIdUsuario(id);
                     usuario.setNombre(nombre);
@@ -88,34 +86,27 @@ namespace ASPWeb_Demo2.Controllers
                     usuario.setCorreo(correo);
                     usuario.setIpv4(this.getIpv4Adress());
 
-                    if (this.getUsuarioManager().Add(usuario))
+                    var task = this.getUsuarioManager().Add(usuario);
+                    await task;
+
+                    if (task.IsCompletedSuccessfully)
                     {
+                        task.Dispose();
                         return RedirectToAction("Login", "LogIn");
-                    } else return View();
-                } else return View();
-            } else return View();
-        }
+                    }
+                    else return View();
+                }
+                else return View();
+            }
+            else return View();
+        } 
+
 
         private bool verifyContrasena(string input) => input.Length >= 8 && input.Any(c => char.IsUpper(c)) && input.Any(c => char.IsDigit(c));
 
-        public SesionCache GetSesionCache()
-        {
-            if (sessionCache == null)
-            {
-                sessionCache = new SesionCache(this.memoryCache);
-                return sessionCache;
-            }
-            return sessionCache;
-        }
+        public SesionCache GetSesionCache() => this.sessionCache;
 
-        private UsuarioManager getUsuarioManager()
-        {
-            if (this.usuarioManager == null)
-            {
-                usuarioManager = new UsuarioManager(this.memoryCache);
-            }
-            return usuarioManager;
-        }
+        private UsuarioManager getUsuarioManager() => this.usuarioManager;
 
         private string? getIpv4Adress()
         {
@@ -138,6 +129,14 @@ namespace ASPWeb_Demo2.Controllers
             {
                 return ex.Message;
             }
+        }
+
+        private async Task<int> generateNumber()
+        {
+            int number = new Random().Next(1000, 5000);
+            if (!this.getUsuarioManager().GetAll().Any(x => x.getIdUsuario() == number)) return number;
+            else generateNumber();
+            return 0;
         }
 
     }

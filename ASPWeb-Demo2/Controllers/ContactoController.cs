@@ -96,28 +96,30 @@ namespace ASPWeb_Demo2.Controllers
          */
 
         [HttpPost]
-        public IActionResult Crear(string nombre, string correo)
+        public async Task<IActionResult> Crear(string nombre, string correo)
         {
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo))
             {
                 Contacto contacto = new Contacto();
-                int id;
 
-                if (this.GetContactoManager().GetAll().Count() > 0) id = this.GetContactoManager().GetAll().Last().idcontacto + 1;
-                else id = 1;
+                int id = await this.generateNumber();
 
                 contacto.idcontacto = id;
                 contacto.nombre = nombre;
                 contacto.correo = correo;
 
-                if (this.GetContactoManager().Add(contacto))
+                var task = this.GetContactoManager().Add(contacto);
+                await task;
+
+                if (task.IsCompletedSuccessfully)
                 {
+                    task.Dispose();
                     Console.WriteLine(this.getUsuarioManager().updateRegistroUsuario(this.RegistroFormato("crear", nombre)));
                     return RedirectToAction("Inicio", "Contacto");
-                } 
+                }
+                else return View();
+                
             } else return View();
-
-            return View();
         }
 
         /*
@@ -127,7 +129,7 @@ namespace ASPWeb_Demo2.Controllers
          */
 
         [HttpPost]
-        public IActionResult Editar(int id, string nombre, string correo)
+        public async Task<IActionResult> Editar(int id, string nombre, string correo)
         {
             Contacto contacto = this.GetContactoManager().GetOne(id);
             if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(correo))
@@ -135,13 +137,21 @@ namespace ASPWeb_Demo2.Controllers
                 if (contacto.nombre != nombre || contacto.correo != correo)
                 {
                     Contacto toSend = new Contacto(0, nombre, correo);
-                    if (this.GetContactoManager().Update(id, toSend))
+
+                    var task = this.GetContactoManager().Update(id, toSend);
+                    await task;
+
+                    if (task.IsCompletedSuccessfully)
                     {
+                        task.Dispose();
                         Console.WriteLine(this.getUsuarioManager().updateRegistroUsuario(this.RegistroFormato("editar", nombre)));
-                    }
-                    return RedirectToAction("Inicio", "Contacto");
-                } else return View(contacto);
-            } else return View(contacto);
+                        return RedirectToAction("Inicio", "Contacto");
+                    } 
+                    else return View(contacto);
+                } 
+                else return View(contacto);
+            } 
+            else return View(contacto);
         }
 
         /*
@@ -151,9 +161,12 @@ namespace ASPWeb_Demo2.Controllers
          */
 
         [HttpPost]
-        public IActionResult Eliminar(int id) 
+        public async Task<IActionResult> Eliminar(int id) 
         {
-            if (this.GetContactoManager().Remove(id))
+            var task = this.GetContactoManager().Remove(id);
+            await task;
+
+            if (task.IsCompletedSuccessfully)
             {
                 Console.WriteLine(this.getUsuarioManager().updateRegistroUsuario(this.RegistroFormato("eliminar", id)));
             }
@@ -210,6 +223,17 @@ namespace ASPWeb_Demo2.Controllers
                 return contactosCache;
             }
             return contactosCache;
+        }
+
+        
+
+        private async Task<int> generateNumber()
+        {
+            int number = new Random().Next(1000, 5000);
+            if (this.GetContactoManager().GetAll().Count() == 0) return number;
+            else if (this.GetContactoManager().GetAll().Where(x => x.idcontacto == number).FirstOrDefault() == null) return number;
+            else generateNumber();
+            return 0;
         }
 
     }

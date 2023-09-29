@@ -83,6 +83,37 @@
             "fecha": "2023-09-28 16:01"
           }
         ]
+      },
+      {
+        "idSesion": 7,
+        "fecha": "29/09/2023",
+        "registros": [
+          {
+            "idRegistro": 1,
+            "texto": "1 - ha creado al usuario myke",
+            "fecha": "2023-09-29 11:25"
+          },
+          {
+            "idRegistro": 2,
+            "texto": "2 - ha creado al usuario adrian",
+            "fecha": "2023-09-29 11:39"
+          },
+          {
+            "idRegistro": 3,
+            "texto": "3 - ha eliminado al usuario 2",
+            "fecha": "2023-09-29 11:41"
+          },
+          {
+            "idRegistro": 4,
+            "texto": "4 - ha eliminado al usuario 3",
+            "fecha": "2023-09-29 11:42"
+          },
+          {
+            "idRegistro": 5,
+            "texto": "5 - ha creado al usuario herreracow",
+            "fecha": "2023-09-29 11:42"
+          }
+        ]
       }
     ]
   },

@@ -10,8 +10,8 @@ namespace ASPWeb_Demo2.Controllers.Managers
     public class UsuarioManager : IManager<Usuario>
     {
 
-        private volatile JsonUtils jsonUtils;
-        private volatile SesionCache sesionCache;
+        private JsonUtils jsonUtils;
+        private readonly SesionCache sesionCache;
 
         public UsuarioManager(IMemoryCache memoryCache) 
         {
@@ -33,14 +33,24 @@ namespace ASPWeb_Demo2.Controllers.Managers
             return null;
         }
 
-        public bool Add(Usuario value)
+        public async Task Add(Usuario value)
         {
             List<Usuario>? list = this.GetAll();
-            list.Add(value);
-            return this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, list.OrderBy(x => x.getIdUsuario()).ToList());
+            var task = new Task(() =>
+            { 
+                list.Add(value);
+            });
+            task.Start();
+
+            await task;
+
+            if (task.IsCompletedSuccessfully)
+            {
+                this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, list.OrderBy(x => x.getIdUsuario()).ToList());
+            }
         }
 
-        public bool Remove(object identifier)
+        public async Task Remove(object identifier)
         {
             try
             {
@@ -52,20 +62,17 @@ namespace ASPWeb_Demo2.Controllers.Managers
                 {
                     if (list.Remove(toRemove))
                     {
-                        return this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, list.OrderBy(x => x.getIdUsuario()).ToList());
+                        this.getJsonUtils().updateJson(JsonUtils.USER_FILE_LINK, list.OrderBy(x => x.getIdUsuario()).ToList());
                     }
-                    else return false;
                 }
-                else return false;
 
             } catch (InvalidCastException ex)
             {
                 Console.WriteLine(ex.Message);  
             }
-            return false;
         }
 
-        public bool Update(object identifier, Usuario NewValue)
+        public async Task Update(object identifier, Usuario NewValue)
         {
             throw new NotImplementedException();
         }

@@ -9,8 +9,8 @@ namespace ASPWeb_Demo2.Controllers.Managers
     public class ContactoManager : IManager<Contacto>
     {
 
-        private volatile JsonUtils jsonUtils;
-        private volatile ContactosCache contactosCache;
+        private JsonUtils jsonUtils;
+        private readonly ContactosCache contactosCache;
 
         public ContactoManager(IMemoryCache memoryCache)
         {
@@ -33,16 +33,25 @@ namespace ASPWeb_Demo2.Controllers.Managers
             return null;
         }
 
-        public bool Add(Contacto value)
+        public async Task Add(Contacto value)
         {
             List<Contacto>? list = this.GetAll();
             list.Add(value);
 
-            this.getContactosCache().RemoveFromCache();
-            return this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
+            var task = new Task(() =>
+            {
+                this.getContactosCache().RemoveFromCache();
+            });
+            task.Start();
+
+            await task;
+            if (task.IsCompletedSuccessfully)
+            {
+                this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
+            } 
         }
 
-        public bool Remove(object identifier)
+        public async Task Remove(object identifier)
         {
             try
             {
@@ -54,22 +63,28 @@ namespace ASPWeb_Demo2.Controllers.Managers
                 {
                     if (list.Remove(toRemove))
                     {
-                        this.getContactosCache().RemoveFromCache();
-                        return this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
+                        var task = new Task(() =>
+                        {
+                            this.getContactosCache().RemoveFromCache();
+                        });
+                        task.Start();
+
+                        await task;
+                        if (task.IsCompletedSuccessfully)
+                        {
+                            this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
+                        }
                     }
-                    else return false;
                 }
-                else return false;
 
             }
             catch (InvalidCastException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return false;
         }
 
-        public bool Update(object identifier, Contacto NewValue)
+        public async Task Update(object identifier, Contacto NewValue)
         {
             try
             {
@@ -85,18 +100,24 @@ namespace ASPWeb_Demo2.Controllers.Managers
                     if (list.Remove(toUpdate))
                     {
                         list.Add(Replace);
-                        this.getContactosCache().RemoveFromCache();
-                        return this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
+                        var task = new Task(() =>
+                        {
+                            this.getContactosCache().RemoveFromCache();
+                        });
+                        task.Start();
+
+                        await task;
+                        if (task.IsCompletedSuccessfully)
+                        {
+                            this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
+                        }
                     }
-                    else return false;
                 }
-                else return false;
             }
             catch (InvalidCastException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return false;
         }
 
         private JsonUtils GetJsonUtils()

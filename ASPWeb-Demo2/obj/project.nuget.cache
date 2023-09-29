@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "11jbt4fRvmp/j6AGJzvWczGVA3sWoxzzM7u+1Yv8SzYx8DkVNShBRLAics8sIoBGANcP6GvMWnoSYxlSqTDwqg==",
+  "dgSpecHash": "p6kR4FUZW5HtLtrRMD9r50YZcSf9EBgrTRrWOY+CD2klIFnRui/z1EjL/HibDYCzg6eG+BJjKX/oOM11y6T+Dw==",
   "success": true,
   "projectFilePath": "C:\\Users\\EJRKC\\source\\repos\\ASPWeb-Demo2\\ASPWeb-Demo2\\ASPWeb-Demo2.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,8 @@
     "C:\\Users\\EJRKC\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0\\microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\EJRKC\\.nuget\\packages\\microsoft.extensions.options\\7.0.0\\microsoft.extensions.options.7.0.0.nupkg.sha512",
     "C:\\Users\\EJRKC\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "C:\\Users\\EJRKC\\.nuget\\packages\\microsoft.testplatform\\17.7.2\\microsoft.testplatform.17.7.2.nupkg.sha512",
+    "C:\\Users\\EJRKC\\.nuget\\packages\\mstest.testframework\\3.1.1\\mstest.testframework.3.1.1.nupkg.sha512",
     "C:\\Users\\EJRKC\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\EJRKC\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],

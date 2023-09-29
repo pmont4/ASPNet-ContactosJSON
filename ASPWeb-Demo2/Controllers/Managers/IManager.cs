@@ -5,9 +5,9 @@
 
         List<T>? GetAll();
         T? GetOne(object identifier);
-        bool Add(T value);
-        bool Remove(object identifier);
-        bool Update(object identifier, T NewValue);
+        Task Add(T value);
+        Task Remove(object identifier);
+        Task Update(object identifier, T NewValue);
 
     }
 }
