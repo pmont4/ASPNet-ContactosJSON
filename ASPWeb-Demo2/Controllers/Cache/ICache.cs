@@ -16,7 +16,7 @@ namespace ASPWeb_Demo2.Controllers.Cache
         }
 
         public abstract T? GetFromCache();
-        public abstract void SetFromCache(T value);
+        public abstract Task SetFromCache(T value);
 
         public async Task RemoveFromCache()
         {

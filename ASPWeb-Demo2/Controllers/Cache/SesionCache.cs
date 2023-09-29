@@ -17,7 +17,7 @@ namespace ASPWeb_Demo2.Controllers.Cache
             return null;
         }
 
-        public override void SetFromCache(Usuario value)
+        public override async Task SetFromCache(Usuario value)
         {
             if (!this.memoryCache.TryGetValue(key, out var usuario))
             {

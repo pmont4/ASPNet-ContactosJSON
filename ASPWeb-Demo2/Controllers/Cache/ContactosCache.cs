@@ -16,7 +16,7 @@ namespace ASPWeb_Demo2.Controllers.Cache
             return null;
         }
 
-        public override void SetFromCache(List<Contacto> value)
+        public override async Task SetFromCache(List<Contacto> value)
         {
             var cacheOptions = new MemoryCacheEntryOptions()
             {

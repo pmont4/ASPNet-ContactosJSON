@@ -9,11 +9,12 @@ namespace ASPWeb_Demo2.Controllers.Managers
     public class ContactoManager : IManager<Contacto>
     {
 
-        private JsonUtils jsonUtils;
+        private readonly JsonUtils jsonUtils;
         private readonly ContactosCache contactosCache;
 
         public ContactoManager(IMemoryCache memoryCache)
         {
+            this.jsonUtils = new JsonUtils();
             this.contactosCache = new ContactosCache(memoryCache);
         }
 
@@ -108,14 +109,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
             }
         }
 
-        private JsonUtils GetJsonUtils()
-        {
-            if (this.jsonUtils == null)
-            {
-                this.jsonUtils = new JsonUtils();
-            }
-            return this.jsonUtils;
-        }
+        private JsonUtils GetJsonUtils() => this.jsonUtils;
 
         private ContactosCache getContactosCache() => this.contactosCache;
 

@@ -10,11 +10,12 @@ namespace ASPWeb_Demo2.Controllers.Managers
     public class UsuarioManager : IManager<Usuario>
     {
 
-        private JsonUtils jsonUtils;
+        private readonly JsonUtils jsonUtils;
         private readonly SesionCache sesionCache;
 
         public UsuarioManager(IMemoryCache memoryCache) 
         {
+            this.jsonUtils = new JsonUtils();
             this.sesionCache = new SesionCache(memoryCache);
         }
 
@@ -231,14 +232,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
             }
         }
 
-        private JsonUtils getJsonUtils()
-        {
-            if (this.jsonUtils == null)
-            {
-                this.jsonUtils = new JsonUtils();
-            }
-            return jsonUtils;
-        }
+        private JsonUtils getJsonUtils() => this.jsonUtils;
 
         private SesionCache GetSesionCache() => this.sesionCache;
 

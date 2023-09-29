@@ -46,7 +46,7 @@ namespace ASPWeb_Demo2.Controllers
          */
 
         [HttpPost]
-        public IActionResult Login(string nombre, string contrasena, bool check)
+        public async Task<IActionResult> Login(string nombre, string contrasena, bool check)
         {
             Usuario? usuario = this.getUsuarioManager().GetOne(nombre);
             if (usuario != null && !(string.IsNullOrEmpty(nombre) && string.IsNullOrEmpty(contrasena)))
@@ -56,7 +56,14 @@ namespace ASPWeb_Demo2.Controllers
                     this.getUsuarioManager().crearSesion(usuario);
                     if (this.GetSesionCache().GetFromCache() == null)
                     {
-                        this.GetSesionCache().SetFromCache(usuario);
+                        var task = this.GetSesionCache().SetFromCache(usuario);
+                        await task;
+
+                        if (task.IsCompletedSuccessfully)
+                        {
+                            task.Dispose();
+                            return RedirectToAction("Inicio", "Contacto");
+                        }
                     }
                     return RedirectToAction("Inicio", "Contacto");
                 }

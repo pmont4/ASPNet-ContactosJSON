@@ -9,21 +9,23 @@ namespace ASPWeb_Demo2.Controllers
     public class ContactoController : Controller
     {
 
-        private SesionCache sesionCache;
-        private ContactosCache contactosCache;
+        private readonly SesionCache sesionCache;
+        private readonly ContactosCache contactosCache;
 
-        private volatile ContactoManager contactoManager;
-        private volatile UsuarioManager usuarioManager;
-
-        private IMemoryCache memoryCache;
+        private readonly ContactoManager contactoManager;
+        private readonly UsuarioManager usuarioManager;
 
         public ContactoController(IMemoryCache memoryCache)
         {
-            this.memoryCache = memoryCache;
+            this.sesionCache = new SesionCache(memoryCache);
+            this.contactosCache = new ContactosCache(memoryCache);
+
+            this.contactoManager = new ContactoManager(memoryCache);
+            this.usuarioManager = new UsuarioManager(memoryCache);
         }
 
         [HttpGet]
-        public IActionResult Inicio()
+        public async Task<IActionResult> Inicio()
         {
             if (this.GetSesionCache().GetFromCache() != null)
             {
@@ -35,7 +37,13 @@ namespace ASPWeb_Demo2.Controllers
                 else
                 {
                     model = this.GetContactoManager().GetAll();
-                    this.GetContactosCache().SetFromCache(model);
+                    var task = this.GetContactosCache().SetFromCache(model);
+                    await task;
+
+                    if (task.IsCompletedSuccessfully)
+                    {
+                        task.Dispose();
+                    }
                 }
                 return View(model);
             }
@@ -187,46 +195,6 @@ namespace ASPWeb_Demo2.Controllers
             return "";
         }
 
-        private ContactoManager GetContactoManager()
-        {
-            if (this.contactoManager == null)
-            {
-                contactoManager = new ContactoManager(this.memoryCache);
-            }
-            return contactoManager;
-        }
-
-        private UsuarioManager getUsuarioManager()
-        {
-            if (this.usuarioManager == null)
-            {
-                usuarioManager = new UsuarioManager(this.memoryCache);
-            }
-            return usuarioManager;
-        }
-
-        private SesionCache GetSesionCache()
-        {
-            if (sesionCache == null)
-            {
-                sesionCache = new SesionCache(this.memoryCache);
-                return sesionCache;
-            }
-            return sesionCache;
-        }
-
-        private ContactosCache GetContactosCache()
-        {
-            if (contactosCache == null)
-            {
-                contactosCache = new ContactosCache(this.memoryCache);
-                return contactosCache;
-            }
-            return contactosCache;
-        }
-
-        
-
         private async Task<int> generateNumber()
         {
             int number = new Random().Next(1000, 5000);
@@ -235,6 +203,14 @@ namespace ASPWeb_Demo2.Controllers
             else generateNumber();
             return 0;
         }
+
+        private ContactoManager GetContactoManager() => this.contactoManager;
+
+        private UsuarioManager getUsuarioManager() => this.usuarioManager;
+
+        private SesionCache GetSesionCache() => this.sesionCache;
+
+        private ContactosCache GetContactosCache() => this.contactosCache;
 
     }
 
