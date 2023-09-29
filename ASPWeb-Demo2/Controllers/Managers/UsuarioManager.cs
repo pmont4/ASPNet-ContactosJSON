@@ -7,6 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers.Managers
 {
+
     public class UsuarioManager : IManager<Usuario>
     {
 
@@ -147,7 +148,6 @@ namespace ASPWeb_Demo2.Controllers.Managers
             return "a";
         }
 
-
         public string updateRegistroUsuario(string mensaje)
         {
             Usuario? cacheUser = this.GetSesionCache().GetFromCache();
@@ -237,4 +237,5 @@ namespace ASPWeb_Demo2.Controllers.Managers
         private SesionCache GetSesionCache() => this.sesionCache;
 
     }
+
 }

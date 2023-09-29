@@ -2,6 +2,7 @@
 
 namespace ASPWeb_Demo2.Models
 {
+
     [Serializable]
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     public class Contacto
@@ -24,15 +25,6 @@ namespace ASPWeb_Demo2.Models
         [JsonProperty("correo")]
         public string correo { get; set; }
 
-        public override bool Equals(object obj)
-        { 
-            return base.Equals(obj);    
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
     }
 
 }

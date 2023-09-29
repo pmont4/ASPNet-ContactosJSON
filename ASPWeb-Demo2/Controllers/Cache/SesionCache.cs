@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers.Cache
 {
+
     public class SesionCache : ICache<Usuario>
     { 
 
@@ -29,4 +30,5 @@ namespace ASPWeb_Demo2.Controllers.Cache
         }
 
     }
+
 }

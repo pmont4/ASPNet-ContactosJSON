@@ -1,5 +1,6 @@
 ﻿namespace ASPWeb_Demo2.Controllers.Managers
 {
+
     public interface IManager<T>
     {
 
@@ -10,4 +11,5 @@
         Task Update(object identifier, T NewValue);
 
     }
+
 }

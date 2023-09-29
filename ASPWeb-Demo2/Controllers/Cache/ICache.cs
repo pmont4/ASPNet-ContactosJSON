@@ -2,7 +2,8 @@
 
 namespace ASPWeb_Demo2.Controllers.Cache
 {
-    public abstract class ICache<T> where T : class
+
+    public abstract class ICache<T>
     {
 
         public IMemoryCache memoryCache;
@@ -26,4 +27,5 @@ namespace ASPWeb_Demo2.Controllers.Cache
         public IMemoryCache GetMemoryCache() => this.memoryCache;
 
     }
+
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers.Cache
 {
+
     public class ContactosCache : ICache<List<Contacto>>
     {
 
@@ -34,5 +35,7 @@ namespace ASPWeb_Demo2.Controllers.Cache
             }
 
         }
+
     }
+
 }

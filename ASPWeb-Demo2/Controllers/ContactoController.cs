@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ASPWeb_Demo2.Controllers
 {
+
     public class ContactoController : Controller
     {
 
@@ -49,7 +50,6 @@ namespace ASPWeb_Demo2.Controllers
             }
             else return RedirectToAction("Login", "LogIn");
         }
-
 
         /*
          * 

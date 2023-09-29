@@ -2,6 +2,7 @@
 
 namespace ASPWeb_Demo2.Models
 {
+
     [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [Serializable]
     public class Usuario
@@ -60,11 +61,6 @@ namespace ASPWeb_Demo2.Models
         public List<Sesion>? getSesiones() => this.sesiones;
 
         public void setSesiones(List<Sesion>? sesiones) => this.sesiones = sesiones;
-
-        public override bool Equals(object? obj)
-        {
-            return base.Equals(obj);
-        }
 
     }
 

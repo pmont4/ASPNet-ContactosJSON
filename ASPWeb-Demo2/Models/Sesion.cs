@@ -37,11 +37,6 @@ namespace ASPWeb_Demo2.Models
 
         public void setRegistros(List<Registro>? registros) => this.registros = registros;
 
-        public override bool Equals(object? obj)
-        {
-            return base.Equals(obj);
-        }
-
     }
 
 }
