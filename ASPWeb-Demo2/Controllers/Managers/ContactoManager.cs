@@ -38,13 +38,9 @@ namespace ASPWeb_Demo2.Controllers.Managers
             List<Contacto>? list = this.GetAll();
             list.Add(value);
 
-            var task = new Task(() =>
-            {
-                this.getContactosCache().RemoveFromCache();
-            });
-            task.Start();
-
+            var task = this.getContactosCache().RemoveFromCache(); 
             await task;
+
             if (task.IsCompletedSuccessfully)
             {
                 this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());
@@ -63,12 +59,7 @@ namespace ASPWeb_Demo2.Controllers.Managers
                 {
                     if (list.Remove(toRemove))
                     {
-                        var task = new Task(() =>
-                        {
-                            this.getContactosCache().RemoveFromCache();
-                        });
-                        task.Start();
-
+                        var task = this.getContactosCache().RemoveFromCache();
                         await task;
                         if (task.IsCompletedSuccessfully)
                         {
@@ -100,13 +91,10 @@ namespace ASPWeb_Demo2.Controllers.Managers
                     if (list.Remove(toUpdate))
                     {
                         list.Add(Replace);
-                        var task = new Task(() =>
-                        {
-                            this.getContactosCache().RemoveFromCache();
-                        });
-                        task.Start();
 
+                        var task = this.getContactosCache().RemoveFromCache();
                         await task;
+
                         if (task.IsCompletedSuccessfully)
                         {
                             this.GetJsonUtils().updateJson(JsonUtils.CONTACT_FILE_LINK, list.OrderBy(x => x.idcontacto).ToList());

@@ -18,7 +18,7 @@ namespace ASPWeb_Demo2.Controllers.Cache
         public abstract T? GetFromCache();
         public abstract void SetFromCache(T value);
 
-        public void RemoveFromCache()
+        public async Task RemoveFromCache()
         {
             this.GetMemoryCache().Remove(this.key);
         }
